@@ -1,0 +1,7 @@
+CREATE USER 'it_bootcamp'@'localhost' IDENTIFIED BY 'it_bootcamp_pass';
+GRANT CREATE, ALTER, DROP, INSERT, UPDATE, DELETE, SELECT, REFERENCES, RELOAD
+on *.* TO 'it_bootcamp'@'localhost' WITH GRANT OPTION;
+
+FLUSH PRIVILEGES;
+
+CREATE DATABASE IF NOT EXISTS it_bootcamp_app;
