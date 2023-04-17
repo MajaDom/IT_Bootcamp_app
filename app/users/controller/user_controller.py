@@ -19,7 +19,8 @@ class UserController:
 
         Param email: Receive the email address of the user
         Param password: Store the password of the user
-        Param username: Identify the user in the system
+        Param first_name: First name.
+        Param last_name: Last name.
         Return: A response object.
         """
         try:

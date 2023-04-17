@@ -58,7 +58,6 @@ def login_user(login: UserLoginSchema, response: JSONResponse):
     It hashes the password using sha256 and then uses the UserController to login user.
     The function returns a token for the user.
 
-    Param username:str: Check if the username is already taken.
     Param email:str: Check if the user exists in the database.
     Param password:str: Store the hashed password.
     Param response:Response: Set the cookie for the user.

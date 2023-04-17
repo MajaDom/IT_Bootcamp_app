@@ -23,7 +23,8 @@ class UserServices:
 
         Param email:str: Store the email of the user.
         Param password:str: Hash the password.
-        Param username:str: Set the username of the new user.
+        Param first_name:str: First name.
+        Param last_name:str: Last name.
         Return: The user object that was created.
         """
         try:

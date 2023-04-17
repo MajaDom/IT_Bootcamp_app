@@ -34,7 +34,7 @@ class EmailServices:
         html = html_first_part + f"Welcome {first_name}. " + html_second_part + f"<strong>{str(code)}</strong>"
         html += html_third_part
         message = MessageSchema(
-            subject="Finish your registration on Netflix.",
+            subject="Finish your registration on ITBootcamp.",
             recipients=[email],
             body=html,
             subtype=MessageType.html,

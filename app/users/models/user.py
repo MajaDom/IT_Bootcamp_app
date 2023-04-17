@@ -20,7 +20,7 @@ class User(Base):
     is_superuser = Column(Boolean, default=False)
     verification_code = Column(Integer(), nullable=True)
 
-    # TODO: class_id relationship will be added
+    # TODO: class_id, user_type_id relationships will be added
 
     def __init__(self, first_name: str, last_name: str, email: str, password_hashed: str,
                  date_subscribed: str = date.today(), is_active: bool = True, is_superuser: bool = False,
