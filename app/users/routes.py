@@ -11,10 +11,7 @@ from app.users.controller import UserController
 user_router = APIRouter(prefix="/api/users", tags=["Users"])
 
 
-@user_router.post("/register",
-                  summary="User Registration",
-                  status_code=status.HTTP_201_CREATED
-                  )
+@user_router.post("/registration", summary="User Registration", status_code=status.HTTP_201_CREATED)
 def register(user: UserSchemaIn, worker: BackgroundTasks):
     """
     Function creates a new user in the database.
@@ -32,10 +29,7 @@ def register(user: UserSchemaIn, worker: BackgroundTasks):
     return UserController.create_user(worker, user.first_name, user.last_name, valid_email, user.password)
 
 
-@user_router.patch("/user-verification",
-                   summary="User Verification",
-                   status_code=status.HTTP_200_OK
-                   )
+@user_router.patch("/email-verification", summary="User Verification", status_code=status.HTTP_200_OK)
 def verify_user(verification_code: int = Body(embed=True)):
     """
     Function verifies a user's account by verifying the verification code sent to their email.
@@ -49,9 +43,7 @@ def verify_user(verification_code: int = Body(embed=True)):
     return JSONResponse(content="Account verified. You can log in now", status_code=200)
 
 
-@user_router.post("/user-login",
-                  summary="User Login",
-                  )
+@user_router.post("/login", summary="User Login",)
 def login_user(login: UserLoginSchema, response: JSONResponse):
     """
     Function takes in a username, email, password and response object.

@@ -4,8 +4,7 @@ from fastapi import HTTPException
 
 from app.base.base_exception import AppException
 from app.users.service import UserServices
-from app.users.exceptions import AdminLoginException
-from app.users.service.user_auth_service import sign_jwt
+from app.users.service import sign_jwt
 
 
 class UserController:
@@ -62,7 +61,7 @@ class UserController:
         try:
             user = UserServices.login_user(email, password)
             if user.is_superuser:
-                raise AdminLoginException(code=400, message="Use admin login.")
+                return sign_jwt(user.id, "super_user"), user.id
             return sign_jwt(user.id, "regular_user"), user.id
 
         except AppException as exc:
