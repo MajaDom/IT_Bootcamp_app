@@ -88,5 +88,3 @@ class GenerationRepository(BaseCRUDRepository):
             return True
         except Exception as e:
             raise e
-        
-

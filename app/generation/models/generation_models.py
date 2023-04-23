@@ -25,5 +25,3 @@ class Generation(Base):
         self.end_date = datetime.strptime(end_date, "%Y-%m-%d")
         self.is_active = is_active
         self.course_id = course_id
-
-        

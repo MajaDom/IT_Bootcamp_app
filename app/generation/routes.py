@@ -19,7 +19,7 @@ def get_generation_by_id(generation_id: str):
 def get_generation_by_name(generation_name: str):
     return GenerationController.get_generation_by_name(generation_name)  
 
-@generation_router.get("/get-all-generations", response_model=GenerationSchema)
+@generation_router.get("/get-all-generations", response_model=list[GenerationSchema])
 def get_all_generations():
     return GenerationController.get_all_generations()
 
@@ -29,4 +29,4 @@ def update_generation_by_id(generation_id: str, generation: UpdateGenerationSche
 
 @generation_router.delete("/")
 def delete_generation_by_id(generation_id: str):
-    return GenerationController.delete_generation_by_id(generation_id)      
+    return GenerationController.delete_generation_by_id(generation_id)
