@@ -25,5 +25,11 @@ def delete_course_by_id(course_id: str):
     return CourseController.delete_course_by_id(course_id)      
 
 @course_router.put("/update", response_model=CourseSchema)
+<<<<<<< Updated upstream
 def update_course(course_id, new_course):
     return CourseController.update_course(course_id, new_course)
+=======
+def update_course(course_id, new_name):
+    return CourseController.update_course_name(course_id, new_name)
+
+>>>>>>> Stashed changes

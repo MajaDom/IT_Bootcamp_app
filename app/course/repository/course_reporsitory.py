@@ -9,7 +9,7 @@ class CourseRepository:
         
         self.db = db
 
-    def create_course(self, course_name, course_description):
+    def create_course(self, course_name, course_description): 
 
         try:
             course = Course(course_name, course_description)
