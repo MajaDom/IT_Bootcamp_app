@@ -8,10 +8,8 @@ class CourseServices:
         try:
             with SessionLocal() as db:
                 course_repository = CourseRepository(db)
-                c = course_repository.get_course_by_name(course_name)
-                if c is None:
-                    return course_repository.create_course(course_name, course_description)      
-                raise CourseExists(message="Course already exists in the database.", code=400)
+                c = course_repository.create_course(course_name, course_description)
+                return c     
         except Exception as e:
             raise e
 
@@ -42,10 +40,10 @@ class CourseServices:
             raise e
 
     @staticmethod
-    def update_course(course_id: str, new_course: str):
+    def update_course_name(course_id: str, new_name: str):
         try:
             with SessionLocal() as db:
                 course_repository = CourseRepository(db)                  
-                return course_repository.update_course(course_id, new_course)          
+                return course_repository.update_course_name(course_id, new_name)          
         except Exception as e:
             raise e

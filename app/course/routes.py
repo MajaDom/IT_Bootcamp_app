@@ -11,12 +11,13 @@ def create_course(course: CourseSchemaIn):
     return CourseController.create_course(course.course_name, course.course_description) 
 
 
+
 @course_router.get("/id", response_model=CourseSchema)
 def get_course_by_id(course_id: str):
     return CourseController.get_course_by_id(course_id)    
 
 
-@course_router.get("/get-all-contact-types", response_model=CourseSchema)
+@course_router.get("/get-all-courses", response_model=list[CourseSchema])
 def get_all_courses():
     return CourseController.get_all_courses()
 
@@ -25,5 +26,5 @@ def delete_course_by_id(course_id: str):
     return CourseController.delete_course_by_id(course_id)      
 
 @course_router.put("/update", response_model=CourseSchema)
-def update_course(course_id, new_course):
-    return CourseController.update_course(course_id, new_course)
+def update_course(course_id, new_name):
+    return CourseController.update_course_name(course_id, new_name)
