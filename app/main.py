@@ -5,6 +5,7 @@ from starlette.responses import RedirectResponse
 from app.db.database import engine, Base
 from app.users.routes import user_router
 from app.course.routes import course_router
+from app.consultations.routes import consultation_router
 Base.metadata.create_all(bind=engine)
 
 
@@ -12,6 +13,7 @@ def init_app():
     app = FastAPI()
     app.include_router(user_router)
     app.include_router(course_router)
+    app.include_router(consultation_router)
     return app
 
 
