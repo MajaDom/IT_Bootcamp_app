@@ -56,9 +56,9 @@ class CourseController:
             raise HTTPException(status_code=400, detail=str(e))
 
     @staticmethod
-    def update_course(course_id: str, new_course: str):
+    def update_course_name(course_id: str, new_name: str):
         try:
-            c = CourseServices.update_course(course_id, new_course)     
+            c = CourseServices.update_course_name(course_id, new_name)     
             return c
         except CourseNotFound as e:
             raise HTTPException(status_code=e.code, detail=e.message)

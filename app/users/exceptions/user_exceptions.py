@@ -41,3 +41,9 @@ class InactiveUserException(AppException):
     """Exception raised when user with inactive status tries to log in."""
     message = "Your account is inactive. Please contact our support team."
     code = 401
+
+
+class UserEmailDoesNotExistsException(AppException):
+    """Exception raised when user searched by unknown Email."""
+    message = "User with this email does not exist."
+    code = 404
