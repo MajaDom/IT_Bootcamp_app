@@ -8,8 +8,8 @@ class CourseServices:
         try:
             with SessionLocal() as db:
                 course_repository = CourseRepository(db)
-                
-                return course_repository.create_course(course_name, course_description)      
+                c = course_repository.create_course(course_name, course_description)
+                return c     
         except Exception as e:
             raise e
 
@@ -44,6 +44,6 @@ class CourseServices:
         try:
             with SessionLocal() as db:
                 course_repository = CourseRepository(db)                  
-                return course_repository.update_course(course_id, new_name)          
+                return course_repository.update_course_name(course_id, new_name)          
         except Exception as e:
             raise e

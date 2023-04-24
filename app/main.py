@@ -5,8 +5,8 @@ from starlette.responses import RedirectResponse
 from app.db.database import engine, Base
 from app.users.routes import user_router
 from app.course.routes import course_router
-from app.consultations.routes import consultation_router
 from app.generation.routes import generation_router
+from app.consultations.routes import consultation_router
 
 
 Base.metadata.create_all(bind=engine)
