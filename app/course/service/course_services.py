@@ -1,6 +1,6 @@
 from app.course.repository import CourseRepository
 from app.db.database import SessionLocal
-from app.course.exceptions import CourseNotFound, CourseExists
+from app.course.exceptions import CourseExists
 
 class CourseServices:
     @staticmethod
