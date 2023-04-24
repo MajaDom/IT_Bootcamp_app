@@ -68,7 +68,7 @@ class GenerationServices:
     def delete_generation_by_id(generation_id: str):
         try:
             with SessionLocal() as db:
-                generation_repository = GenerationRepository(db)
+                generation_repository = GenerationRepository(db, Generation)
                 return generation_repository.delete_generation_by_id(generation_id)
         except Exception as e:
             raise e
