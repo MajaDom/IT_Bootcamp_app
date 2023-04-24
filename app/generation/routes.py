@@ -10,7 +10,6 @@ generation_router = APIRouter(tags=["generation"], prefix="/api/generation")
 def create_generation(generation: GenerationSchemaIn):
     return GenerationController.create_generation(generation.name, generation.start_date, generation.end_date, generation.is_active, generation.course_id) 
 
-
 @generation_router.get("/id", response_model=GenerationSchema)
 def get_generation_by_id(generation_id: str):
     return GenerationController.get_generation_by_id(generation_id)    
