@@ -5,7 +5,8 @@ from fastapi_mail import ConnectionConfig, MessageSchema, MessageType, FastMail
 from pydantic import EmailStr
 
 from app.config import settings
-from app.email_templates import html_first_part, html_second_part, html_third_part
+from app.email_templates.user_registration_template import html_first_part, html_second_part, html_third_part
+from app.email_templates.password_reset_template import html_first_part, html_second_part
 
 
 class EmailServices:
@@ -21,7 +22,7 @@ class EmailServices:
     )
 
     @staticmethod
-    def send_code_for_verification(email: EmailStr, code: int, first_name):
+    def send_code_for_verification(email: EmailStr, code: int, first_name: str, password: str):
         """
         Function sends a verification code to the user's email address.
         The function takes in an email and a code as parameters, and uses them to create an HTML message
@@ -32,7 +33,10 @@ class EmailServices:
         Return: The message that was sent to the user.
         """
         html = html_first_part + f"Welcome {first_name}. " + html_second_part + f"<strong>{str(code)}</strong>"
+        html += f"<p>Your password for login is: </p>{password}"
+        html += "<p>Reset your password as soon as possible for security reasons</p>"
         html += html_third_part
+
         message = MessageSchema(
             subject="Finish your registration on ITBootcamp.",
             recipients=[email],
@@ -54,7 +58,7 @@ class EmailServices:
         Param code:int: Send the code to the user.
         Return: A future object.
         """
-        html = None  # TODO: finish html_template
+        html = html_first_part + f"<strong>{str(code)}</strong>" + html_second_part
         message = MessageSchema(
             subject="Reset Password.",
             recipients=[email],
