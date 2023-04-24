@@ -19,7 +19,7 @@ class UserSchema(BaseModel):
         orm_mode = True
 
 
-class UserSchemaIn(BaseModel):
+class UserRegistrationSchema(BaseModel):
     """Base User schema for input"""
     first_name: str
     last_name: str
@@ -50,5 +50,21 @@ class UserLoginSchema(BaseModel):
             "example": {
                 "email": "dummy@gmail.com",
                 "password": "password"
+            }
+        }
+
+
+class ChangePasswordSchema(BaseModel):
+    code: int
+    new_password: str
+    repeat_password: str
+
+    class Config:
+        """Configuration Class"""
+        schema_extra = {
+            "example": {
+                "code": 123456,
+                "new_password": "new_password",
+                "repeat_password": "repeat_password"
             }
         }
