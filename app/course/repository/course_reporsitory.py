@@ -9,7 +9,7 @@ class CourseRepository:
         
         self.db = db
 
-    def create_course(self, course_name, course_description):
+    def create_course(self, course_name, course_description): 
 
         try:
             course = Course(course_name, course_description)
@@ -52,13 +52,13 @@ class CourseRepository:
         except Exception as e:
             raise e
 
-    def update_course(self, course_id: str, new_course: str):
+    def update_course(self, course_id: str, new_name: str):
 
         try:
             course = self.db.query(Course).filter(Course.id == course_id).first()
             if course is None:
                 raise CourseNotFound(f"Course with provided ID: {course_id} not found", 404) 
-            course.course = new_course
+            course.course_name = new_name
             self.db.add(course)
             self.db.commit()
             self.db.refresh(course)
