@@ -23,7 +23,7 @@ class GenerationSchemaIn(BaseModel):
     name: str
     start_date: str
     end_date: str
-    is_active: str
+    is_active: bool
     course_id: str
     
     class Config:

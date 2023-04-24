@@ -23,8 +23,8 @@ class GenerationServices:
     def get_generation_by_id(generation_id: str):
         with SessionLocal() as db:
             try:
-                generation_repository = GenerationRepository(db)
-                return generation_repository.get_generation_by_id(generation_id=generation_id)
+                generation_repository = GenerationRepository(db, Generation)
+                return generation_repository.get_generation_by_id(generation_id)
             except Exception as e:
                 raise e
             
@@ -32,7 +32,7 @@ class GenerationServices:
     def get_generation_by_name(generation_name: str):
         with SessionLocal() as db:
             try:
-                generation_repository = GenerationRepository(db)
+                generation_repository = GenerationRepository(db, Generation)
                 return generation_repository.get_generation_by_name(generation_name=generation_name)
             except Exception as e:
                 raise e
@@ -41,7 +41,7 @@ class GenerationServices:
     @staticmethod
     def get_all_generations():
         with SessionLocal() as db:
-            generation_repository = GenerationRepository(db)
+            generation_repository = GenerationRepository(db, Generation)
             return generation_repository.get_all_generations()
 
 

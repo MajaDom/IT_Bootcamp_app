@@ -1,5 +1,6 @@
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
+from app import generation
 from app.db.database import SessionLocal
 from app.generation.models import Generation
 from app.generation.exceptions import GenerationNotFound
@@ -48,8 +49,8 @@ class GenerationRepository(BaseCRUDRepository):
 
 
     def get_generation_by_id(self, generation_id: str):
-        user = self.db.query(Generation).filter(Generation.id == generation_id).first()
-        return user
+        generation = self.db.query(Generation).filter(Generation.id == generation_id).first()
+        return generation
     
     def get_generation_by_name(self, generation_name: str):
 
