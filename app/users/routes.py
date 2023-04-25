@@ -134,6 +134,13 @@ def reset_password_complete(request: Request, reset: ChangePasswordSchema):
 
 @user_router.get("/logout", summary="Logout user.", status_code=status.HTTP_200_OK)
 def logout(request: Request, response: JSONResponse):
+    """
+    Logout user and clear cookies.
+
+    Param request: Request: Check the user's cookie.
+    Param response: Response object.
+    Return: Message success.
+    """
     if request.cookies:
         response.delete_cookie(key="user_email")
         response.delete_cookie(key="user_id")
@@ -147,10 +154,9 @@ def logout(request: Request, response: JSONResponse):
 def deactivate_user(user_id: str = Body(embed=True)):
     """
     Function takes a user_id as an argument and deactivates the corresponding user.
-    It returns True if the operation was successful, False otherwise.
 
     Param user_id:str: Specify the user that is to be deactivated
-    Return: The user-controller.
+    Return: Updated user object.
     """
     return UserController.change_user_status(user_id, activity=False)
 
@@ -159,13 +165,12 @@ def deactivate_user(user_id: str = Body(embed=True)):
                    summary="Deactivate user. Admin route.",
                    dependencies=[Depends(JWTBearer(["super_user"]))],
                    response_model=UserSchemaOut)
-def deactivate_user(user_id: str = Body(embed=True)):
+def activate_user(user_id: str = Body(embed=True)):
     """
-    Function takes a user_id as an argument and deactivates the corresponding user.
-    It returns True if the operation was successful, False otherwise.
+    Function takes a user_id as an argument and activates the corresponding user.
 
     Param user_id:str: Specify the user that is to be deactivated
-    Return: The user-controller.
+    Return: Updated user object.
     """
     return UserController.change_user_status(user_id, activity=True)
 

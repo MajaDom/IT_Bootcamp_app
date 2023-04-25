@@ -57,7 +57,8 @@ class UserRepository(BaseCRUDRepository):
 
     def read_all_active_users(self, active=True):
         """
-        The read_all_active_users function returns all active users in the database.
+        The read_all_active_users function returns all active users in the database. If active param is False
+        returns all inactive users.
 
         Param active=True: Filter the users to only return active users.
         Return: A list of users that are active.

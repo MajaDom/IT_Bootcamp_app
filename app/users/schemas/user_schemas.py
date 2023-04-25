@@ -20,7 +20,7 @@ class UserSchema(BaseModel):
 
 
 class UserSchemaOut(BaseModel):
-    """Base schema for User"""
+    """User Out schema"""
     id: UUID4
     first_name: str
     last_name: str
@@ -70,6 +70,7 @@ class UserLoginSchema(BaseModel):
 
 
 class ChangePasswordSchema(BaseModel):
+    """User schema for password change"""
     code: int
     new_password: str
     repeat_password: str
@@ -86,6 +87,7 @@ class ChangePasswordSchema(BaseModel):
 
 
 class UserUpdateSchema(BaseModel):
+    """User schema for update"""
     first_name: str
     last_name: str
     email: str
