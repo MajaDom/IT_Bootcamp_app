@@ -1,4 +1,5 @@
 import hashlib
+from typing import List
 
 from fastapi import APIRouter, status, HTTPException, Body, Depends
 from email_validator import validate_email, EmailNotValidError
@@ -48,7 +49,7 @@ def verify_user(verification_code: int = Body(embed=True)):
     return JSONResponse(content="Account verified. You can log in now", status_code=200)
 
 
-@user_router.post("/login", summary="User Login",)
+@user_router.post("/login", summary="User Login", )
 def login_user(login: UserLoginSchema, response: JSONResponse):
     """
     Function takes in a username, email, password and response object.
@@ -67,10 +68,10 @@ def login_user(login: UserLoginSchema, response: JSONResponse):
     return token
 
 
-@user_router.post("/reset-password",
-                  summary="Reset user's password. User route.",
-                  dependencies=[Depends(JWTBearer(["super_user", "regular_user"]))]
-                  )
+@user_router.patch("/reset-password",
+                   summary="Reset user's password. User route.",
+                   dependencies=[Depends(JWTBearer(["super_user", "regular_user"]))]
+                   )
 def reset_password(request: Request, email: str = Body(embed=True)):
     """
     Function is used to reset the password of a user.
@@ -88,8 +89,23 @@ def reset_password(request: Request, email: str = Body(embed=True)):
     return response
 
 
+@user_router.patch("/forget-password", summary="Ask for password change.")
+def forget_password(email: str = Body(embed=True)):
+    """
+    Function is used to send a new ver.code to the user's email.
+    It takes an email as input and sends information on user's email.
+
+    Param email:str: Specify the email address of the user whose password is to be changed.
+    Return: A response object.
+    """
+    UserController.change_password(email)
+    response = JSONResponse(content="Request granted. Instructions are sent to your email.", status_code=200)
+    response.set_cookie(key="code", value="active", max_age=600)
+    return response
+
+
 @user_router.patch("/reset-password-complete",
-                   summary="Save new password. User route.",
+                   summary="Save new password.",
                    status_code=status.HTTP_201_CREATED
                    )
 def reset_password_complete(request: Request, reset: ChangePasswordSchema):
@@ -114,3 +130,98 @@ def reset_password_complete(request: Request, reset: ChangePasswordSchema):
     response = JSONResponse(content="Reset password finished successfully. You can login now.", status_code=200)
     response.delete_cookie(key="code")
     return response
+
+
+@user_router.get("/logout", summary="Logout user.", status_code=status.HTTP_200_OK)
+def logout(request: Request, response: JSONResponse):
+    """
+    Logout user and clear cookies.
+
+    Param request: Request: Check the user's cookie.
+    Param response: Response object.
+    Return: Message success.
+    """
+    if request.cookies:
+        response.delete_cookie(key="user_email")
+        response.delete_cookie(key="user_id")
+    return {"message": "success"}
+
+
+@user_router.patch("/deactivation",
+                   summary="Deactivate user. Admin route.",
+                   dependencies=[Depends(JWTBearer(["super_user"]))],
+                   response_model=UserSchemaOut)
+def deactivate_user(user_id: str = Body(embed=True)):
+    """
+    Function takes a user_id as an argument and deactivates the corresponding user.
+
+    Param user_id:str: Specify the user that is to be deactivated
+    Return: Updated user object.
+    """
+    return UserController.change_user_status(user_id, activity=False)
+
+
+@user_router.patch("/activation",
+                   summary="Deactivate user. Admin route.",
+                   dependencies=[Depends(JWTBearer(["super_user"]))],
+                   response_model=UserSchemaOut)
+def activate_user(user_id: str = Body(embed=True)):
+    """
+    Function takes a user_id as an argument and activates the corresponding user.
+
+    Param user_id:str: Specify the user that is to be deactivated
+    Return: Updated user object.
+    """
+    return UserController.change_user_status(user_id, activity=True)
+
+
+@user_router.get("/",
+                 summary="Get all users.",
+                 dependencies=[Depends(JWTBearer(["super_user"]))],
+                 response_model=List[UserSchemaOut])
+def get_all_users():
+    return UserController.get_all_users()
+
+
+@user_router.get("/id",
+                 summary="Get user by his ID. Admin route",
+                 dependencies=[Depends(JWTBearer(["super_user"]))],
+                 response_model=UserSchemaOut)
+def get_user_by_id(user_id: str):
+    return UserController.get_user_by_id(user_id)
+
+
+@user_router.put("/",
+                 summary="Edit user.",
+                 dependencies=[Depends(JWTBearer(["regular_user", "super_user"]))],
+                 response_model=UserSchema)
+def edit_user(request: Request, user: UserUpdateSchema):
+    user_id = request.cookies.get("user_id")
+    user_dict = {attr: value for attr, value in user.dict().items() if value}
+    return UserController.edit_user(user_id, user_dict)
+
+
+@user_router.get("/all-active-users",
+                 response_model=list[UserSchemaOut],
+                 summary="Get all active users. Admin route.",
+                 dependencies=[Depends(JWTBearer(["super_user"]))])
+def get_all_active_users():
+    """
+    Function returns a list of all active users.
+
+    Return: A list of all active users.
+    """
+    return UserController.get_all_active_users()
+
+
+@user_router.get("/all-inactive-users",
+                 response_model=list[UserSchemaOut],
+                 summary="Get all inactive users. Admin route.",
+                 dependencies=[Depends(JWTBearer(["super_user"]))])
+def get_all_inactive_users():
+    """
+    The get_all_inactive_users function returns a list of all inactive users.
+
+    Return: A list of all inactive users.
+    """
+    return UserController.get_all_active_users(active=False)
