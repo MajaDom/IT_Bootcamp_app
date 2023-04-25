@@ -14,7 +14,6 @@ class ConsultationSchema(BaseModel):
 class ConsultationSchemaIN(BaseModel):
     topic: str
     description: str
-    user_id: str
 
     class Config:
         orm_mode = True
