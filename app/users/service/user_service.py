@@ -181,3 +181,13 @@ class UserServices:
                 return repository.read_all()
         except Exception as exc:
             raise exc
+
+    @staticmethod
+    def edit_user(user_id: str, user: dict):
+        try:
+            with SessionLocal() as db:
+                repository = UserRepository(db, User)
+                user_object = repository.read_by_id(user_id)
+                return repository.update(user_object, user)
+        except Exception as exc:
+            raise exc

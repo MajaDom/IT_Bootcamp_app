@@ -166,3 +166,13 @@ def deactivate_user(user_id: str = Body(embed=True)):
 @user_router.get("/", summary="Get all users.", dependencies=[Depends(JWTBearer(["super_user"]))])
 def get_all_users():
     return UserController.get_all_users()
+
+
+@user_router.put("/",
+                 summary="Edit user.",
+                 dependencies=[Depends(JWTBearer(["regular_user", "super_user"]))],
+                 response_model=UserSchema)
+def edit_user(request: Request, user: UserUpdateSchema):
+    user_id = request.cookies.get("user_id")
+    user_dict = {attr: value for attr, value in user.dict().items() if value}
+    return UserController.edit_user(user_id, user_dict)

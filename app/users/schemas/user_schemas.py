@@ -68,3 +68,19 @@ class ChangePasswordSchema(BaseModel):
                 "repeat_password": "repeat_password"
             }
         }
+
+
+class UserUpdateSchema(BaseModel):
+    first_name: str
+    last_name: str
+    email: str
+
+    class Config:
+        """Configuration Class"""
+        schema_extra = {
+            "example": {
+                "first_name": "John",
+                "last_name": "Doe",
+                "email": "dummy@gmail.com"
+            }
+        }

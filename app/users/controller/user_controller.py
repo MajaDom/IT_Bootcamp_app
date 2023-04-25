@@ -135,3 +135,14 @@ class UserController:
             raise HTTPException(status_code=exc.code, detail=exc.message) from exc
         except Exception as exc:
             raise HTTPException(status_code=500, detail=str(exc)) from exc
+
+    @staticmethod
+    def edit_user(user_id: str, user: dict):
+        try:
+            user = UserServices.edit_user(user_id, user)
+            return user
+        except AppException as exc:
+            raise HTTPException(status_code=exc.code, detail=exc.message) from exc
+        except Exception as exc:
+            raise HTTPException(status_code=500, detail=str(exc)) from exc
+
