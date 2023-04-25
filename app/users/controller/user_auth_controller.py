@@ -51,3 +51,4 @@ class JWTBearer(HTTPBearer):
             print(exc)
             payload = None
         return {"valid": bool(payload), "role": payload["role"] if payload else None}
+
