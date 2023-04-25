@@ -196,11 +196,10 @@ def edit_user(request: Request, user: UserUpdateSchema):
     return UserController.edit_user(user_id, user_dict)
 
 
-@user_router.get("/get-all-active-users",
+@user_router.get("/all-active-users",
                  response_model=list[UserSchemaOut],
                  summary="Get all active users. Admin route.",
-                 dependencies=[Depends(JWTBearer(["super_user"]))]
-                 )
+                 dependencies=[Depends(JWTBearer(["super_user"]))])
 def get_all_active_users():
     """
     Function returns a list of all active users.
@@ -210,11 +209,10 @@ def get_all_active_users():
     return UserController.get_all_active_users()
 
 
-@user_router.get("/get-all-inactive-users",
+@user_router.get("/all-inactive-users",
                  response_model=list[UserSchemaOut],
                  summary="Get all inactive users. Admin route.",
-                 dependencies=[Depends(JWTBearer(["super_user"]))]
-                 )
+                 dependencies=[Depends(JWTBearer(["super_user"]))])
 def get_all_inactive_users():
     """
     The get_all_inactive_users function returns a list of all inactive users.
