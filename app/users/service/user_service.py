@@ -191,3 +191,20 @@ class UserServices:
                 return repository.update(user_object, user)
         except Exception as exc:
             raise exc
+
+    @staticmethod
+    def get_all_active_users(active: bool = True):
+        """
+        The get_all_active_users function retrieves all active users from the database.
+        It takes one parameter, active, which is a boolean value that defaults to True.
+        If the user is not an admin and wants to see only their own information they can set this parameter to False.
+
+        Param active:bool=True: Filter the results of the query.
+        Return: A list of all active users.
+        """
+        try:
+            with SessionLocal() as db:
+                repository = UserRepository(db, User)
+                return repository.read_all_active_users(active=active)
+        except Exception as exc:
+            raise exc

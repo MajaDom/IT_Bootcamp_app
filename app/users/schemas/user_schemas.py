@@ -19,6 +19,21 @@ class UserSchema(BaseModel):
         orm_mode = True
 
 
+class UserSchemaOut(BaseModel):
+    """Base schema for User"""
+    id: UUID4
+    first_name: str
+    last_name: str
+    email: str
+    is_active: bool
+    is_superuser: bool
+    verification_code: Optional[int]
+
+    class Config:
+        """Configuration Class"""
+        orm_mode = True
+
+
 class UserRegistrationSchema(BaseModel):
     """Base User schema for input"""
     first_name: str

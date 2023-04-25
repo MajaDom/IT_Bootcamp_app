@@ -137,10 +137,38 @@ class UserController:
             raise HTTPException(status_code=500, detail=str(exc)) from exc
 
     @staticmethod
+    def get_user_by_id(user_id: str):
+        try:
+            user = UserServices.get_user_by_id(user_id)
+            return user
+        except AppException as exc:
+            raise HTTPException(status_code=exc.code, detail=exc.message) from exc
+        except Exception as exc:
+            raise HTTPException(status_code=500, detail=str(exc)) from exc
+
+    @staticmethod
     def edit_user(user_id: str, user: dict):
         try:
             user = UserServices.edit_user(user_id, user)
             return user
+        except AppException as exc:
+            raise HTTPException(status_code=exc.code, detail=exc.message) from exc
+        except Exception as exc:
+            raise HTTPException(status_code=500, detail=str(exc)) from exc
+
+    @staticmethod
+    def get_all_active_users(active=True):
+        """
+        The get_all_active_users function retrieves all active users from the database.
+        It takes an optional parameter, active, which defaults to True. If it is set to False,
+        it will retrieve all inactive users instead.
+
+        Param active=True: Filter the users by their active status.
+        Return: A list of users that are active.
+        """
+        try:
+            users = UserServices.get_all_active_users(active=active)
+            return users
         except AppException as exc:
             raise HTTPException(status_code=exc.code, detail=exc.message) from exc
         except Exception as exc:
