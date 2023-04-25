@@ -6,6 +6,11 @@ class ConsultationSchema(BaseModel):
     topic: str
     description: str
     user_id: str
+    date_inquired: str
+    date_confirmed: str
+    date_scheduled: str
+    status: bool
+    is_active: bool
 
     class Config:
         orm_mode = True

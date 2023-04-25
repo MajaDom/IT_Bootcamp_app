@@ -1,6 +1,7 @@
 """Repository for Consultation"""
 
 from sqlalchemy.exc import IntegrityError
+from typing import Union
 
 from app.base import BaseCRUDRepository, AppException
 
@@ -8,7 +9,7 @@ from app.base import BaseCRUDRepository, AppException
 class ConsultationRepository(BaseCRUDRepository):
     """Repository for Consultation Model"""
 
-    def create(self, attributes: dict):
+    def create(self, attributes: dict) -> BaseCRUDRepository:
         """
         The create function creates a new consultation in the database.
         It takes an attributes dictionary as its only parameter, and returns the created Consultation object.
@@ -18,6 +19,43 @@ class ConsultationRepository(BaseCRUDRepository):
         """
         try:
             return super().create(attributes)
+        except IntegrityError as exc:
+            self.db.rollback()
+            raise AppException(message="Something went wrong.", code=400) from exc
+
+    def read_all(self) -> list[BaseCRUDRepository]:
+        """
+        Read all function returns all consultations from the database.
+        """
+        try:
+            return super().read_all()
+        except IntegrityError as exc:
+            self.db.rollback()
+            raise AppException(message="Something went wrong.", code=400) from exc
+
+    def read_by_id(self, model_id: Union[str, int]) -> BaseCRUDRepository:
+        """
+        Function read_by_id returns one consultation from the database based on provided id.
+        """
+        try:
+            return super().read_by_id(model_id)
+        except IntegrityError as exc:
+            self.db.rollback()
+            raise AppException(message="Something went wrong.", code=400) from exc
+
+    def update(self, db_obj, updates: dict) -> BaseCRUDRepository:
+        """
+        Function update updates desired consultation
+        """
+        try:
+            return super().update(db_obj, updates)
+        except IntegrityError as exc:
+            self.db.rollback()
+            raise AppException(message="Something went wrong.", code=400) from exc
+
+    def delete(self, model_id: Union[str, int]):
+        try:
+            return super().delete(model_id)
         except IntegrityError as exc:
             self.db.rollback()
             raise AppException(message="Something went wrong.", code=400) from exc
