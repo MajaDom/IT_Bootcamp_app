@@ -48,7 +48,7 @@ def verify_user(verification_code: int = Body(embed=True)):
     return JSONResponse(content="Account verified. You can log in now", status_code=200)
 
 
-@user_router.post("/login", summary="User Login",)
+@user_router.post("/login", summary="User Login", )
 def login_user(login: UserLoginSchema, response: JSONResponse):
     """
     Function takes in a username, email, password and response object.
@@ -67,10 +67,10 @@ def login_user(login: UserLoginSchema, response: JSONResponse):
     return token
 
 
-@user_router.post("/reset-password",
-                  summary="Reset user's password. User route.",
-                  dependencies=[Depends(JWTBearer(["super_user", "regular_user"]))]
-                  )
+@user_router.patch("/reset-password",
+                   summary="Reset user's password. User route.",
+                   dependencies=[Depends(JWTBearer(["super_user", "regular_user"]))]
+                   )
 def reset_password(request: Request, email: str = Body(embed=True)):
     """
     Function is used to reset the password of a user.
@@ -82,6 +82,21 @@ def reset_password(request: Request, email: str = Body(embed=True)):
     user_email = request.cookies.get("user_email")
     if user_email != email:
         raise HTTPException(detail="Unrecognized email.", status_code=400)
+    UserController.change_password(email)
+    response = JSONResponse(content="Request granted. Instructions are sent to your email.", status_code=200)
+    response.set_cookie(key="code", value="active", max_age=600)
+    return response
+
+
+@user_router.patch("/forget-password", summary="Ask for password change.")
+def forget_password(email: str = Body(embed=True)):
+    """
+    Function is used to send a new ver.code to the user's email.
+    It takes an email as input and sends information on user's email.
+
+    Param email:str: Specify the email address of the user whose password is to be changed.
+    Return: A response object.
+    """
     UserController.change_password(email)
     response = JSONResponse(content="Request granted. Instructions are sent to your email.", status_code=200)
     response.set_cookie(key="code", value="active", max_age=600)
@@ -114,3 +129,40 @@ def reset_password_complete(request: Request, reset: ChangePasswordSchema):
     response = JSONResponse(content="Reset password finished successfully. You can login now.", status_code=200)
     response.delete_cookie(key="code")
     return response
+
+
+@user_router.get("/logout", summary="Logout user.", status_code=status.HTTP_200_OK)
+def logout(request: Request, response: JSONResponse):
+    if request.cookies:
+        response.delete_cookie(key="user_email")
+        response.delete_cookie(key="user_id")
+    return {"message": "success"}
+
+
+@user_router.patch("/deactivation", summary="Deactivate user.", dependencies=[Depends(JWTBearer(["super_user"]))])
+def deactivate_user(user_id: str = Body(embed=True)):
+    """
+    Function takes a user_id as an argument and deactivates the corresponding user.
+    It returns True if the operation was successful, False otherwise.
+
+    Param user_id:str: Specify the user that is to be deactivated
+    Return: The user-controller.
+    """
+    return UserController.change_user_status(user_id, activity=False)
+
+
+@user_router.patch("/activation", summary="Deactivate user.", dependencies=[Depends(JWTBearer(["super_user"]))])
+def deactivate_user(user_id: str = Body(embed=True)):
+    """
+    Function takes a user_id as an argument and deactivates the corresponding user.
+    It returns True if the operation was successful, False otherwise.
+
+    Param user_id:str: Specify the user that is to be deactivated
+    Return: The user-controller.
+    """
+    return UserController.change_user_status(user_id, activity=True)
+
+
+@user_router.get("/", summary="Get all users.", dependencies=[Depends(JWTBearer(["super_user"]))])
+def get_all_users():
+    return UserController.get_all_users()

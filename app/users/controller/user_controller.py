@@ -106,3 +106,32 @@ class UserController:
             raise HTTPException(status_code=exc.code, detail=exc.message) from exc
         except Exception as exc:
             raise HTTPException(status_code=500, detail=str(exc)) from exc
+
+    @staticmethod
+    def change_user_status(user_id: str, activity: bool = False):
+        """
+        Function is used to deactivate a user.
+        It takes in the user_id of the user that needs to be
+        deactivated and returns the updated User object.
+
+        Param user_id:str: Identify the user
+        Param activity:bool=False: Determine if the user is active or not
+        Return: The user object that was deactivated.
+        """
+        try:
+            user = UserServices.change_user_status(user_id, activity)
+            return user
+        except AppException as exc:
+            raise HTTPException(status_code=exc.code, detail=exc.message) from exc
+        except Exception as exc:
+            raise HTTPException(status_code=500, detail=str(exc)) from exc
+
+    @staticmethod
+    def get_all_users():
+        try:
+            users = UserServices.get_all_users()
+            return users
+        except AppException as exc:
+            raise HTTPException(status_code=exc.code, detail=exc.message) from exc
+        except Exception as exc:
+            raise HTTPException(status_code=500, detail=str(exc)) from exc

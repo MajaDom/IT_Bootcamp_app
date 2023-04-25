@@ -45,7 +45,7 @@ class UserServices:
                 obj = repository.create(fields)
             worker.add_task(EmailServices.send_code_for_verification, obj.email, code, first_name, password)
             return JSONResponse(
-                content="Finish your registration. Instructions are sent to your email.",
+                content="Registration successful. Instructions are sent to user`s email.",
                 status_code=200
             )
         except Exception as exc:
@@ -134,5 +134,50 @@ class UserServices:
                 user = repository.read_user_by_code(code)
                 updates = {"password_hashed": password_hashed, "verification_code": None}
                 return repository.update(user, updates)
+        except Exception as exc:
+            raise exc
+
+    @staticmethod
+    def change_user_status(user_id: str, activity: bool = False):
+        """
+        The change_user_status function is used to change the status of a user.
+        It takes two parameters, user_id and activity. If activity is True, then the user will be activated
+        and if it is False, the user will be deactivated.
+
+        Param user_id:str: Identify the user to be updated
+        Param activity:bool=False: Set the activity status of a user
+        Return: The updated user object.
+        """
+        try:
+            with SessionLocal() as db:
+                repository = UserRepository(db, User)
+                user = UserServices.get_user_by_id(user_id)
+                updates = {"is_active": activity}
+                return repository.update(user, updates)
+        except Exception as exc:
+            raise exc
+
+    @staticmethod
+    def get_user_by_id(user_id: str):
+        """
+        Function is used to retrieve a user by their ID.
+        It takes in the user_id as an argument and returns the User object associated with that ID.
+
+        Param user_id:str: Pass the user_id to the function.
+        Return: A user object.
+        """
+        try:
+            with SessionLocal() as db:
+                repository = UserRepository(db, User)
+                return repository.read_by_id(user_id)
+        except Exception as exc:
+            raise exc
+
+    @staticmethod
+    def get_all_users():
+        try:
+            with SessionLocal() as db:
+                repository = UserRepository(db, User)
+                return repository.read_all()
         except Exception as exc:
             raise exc
