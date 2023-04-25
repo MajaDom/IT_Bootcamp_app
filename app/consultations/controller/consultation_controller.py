@@ -16,8 +16,16 @@ class ConsultationController:
         """
         try:
             user_id = get_jwt_token(request=request)["user_id"]
-            print("ovo je id: ", user_id)
             return ConsultationService.create_new_consultation(topic=topic, description=description, user_id=user_id)
+        except AppException as exc:
+            raise HTTPException(status_code=exc.code, detail=exc.message) from exc
+        except Exception as exc:
+            raise HTTPException(status_code=500, detail=str(exc)) from exc
+
+    @staticmethod
+    def read_all_consultations():
+        try:
+            return ConsultationService.read_all_consultations()
         except AppException as exc:
             raise HTTPException(status_code=exc.code, detail=exc.message) from exc
         except Exception as exc:

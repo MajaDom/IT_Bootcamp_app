@@ -15,3 +15,14 @@ class ConsultationService:
             return consultation
         except Exception as exc:
             raise exc
+
+    @staticmethod
+    def read_all_consultations():
+        try:
+            with SessionLocal() as db:
+                repository = ConsultationRepository(db, Consultation)
+                consultations = repository.read_all()
+            return consultations
+        except Exception as exc:
+            raise exc
+

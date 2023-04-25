@@ -13,3 +13,9 @@ def create_new_consultation(request: Request, consultation: ConsultationSchemaIN
     return ConsultationController.create_new_consultation(topic=consultation.topic,
                                                           description=consultation.description,
                                                           request=request)
+
+
+@consultation_router.get("/show-all-consultations", dependencies=[Depends(JWTBearer(["regular_user"]))],
+                         response_model=ConsultationSchema)
+def read_all_consultations():
+    return ConsultationController.read_all_consultations()

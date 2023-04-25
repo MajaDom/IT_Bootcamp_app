@@ -5,6 +5,7 @@ import jwt
 
 from app.config import settings
 from app.users.exceptions import InvalidTokenException
+from starlette.requests import Request
 
 USER_SECRET = settings.USER_SECRET
 JWT_ALGORITHM = settings.ALGORITHM
@@ -40,3 +41,19 @@ def decode_jwt(token: str) -> dict:
         return decoded_token if decoded_token["expires"] >= time.time() else None
     except (jwt.PyJWTError, jwt.InvalidTokenError) as exc:
         raise InvalidTokenException from exc
+
+
+def get_jwt_token(request: Request) -> dict:
+    """
+    Extracts JWT token from authorization header in request.
+    Raises InvalidTokenError if token is invalid.
+    """
+    auth_headers = request.headers.get("Authorization")
+    if not auth_headers:
+        raise InvalidTokenException
+    token = auth_headers.split(" ")[-1]
+    try:
+        decoded_token = decode_jwt(token)
+    except InvalidTokenException as exc:
+        raise InvalidTokenException()
+    return decoded_token
