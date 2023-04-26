@@ -49,7 +49,7 @@ class GenerationServices:
     def update_generation_by_id(generation_id: str, generation):
         try:
             with SessionLocal() as db:
-                generation_repository = GenerationRepository(db)
+                generation_repository = GenerationRepository(db, Generation)
                 stored_generation_data = generation_repository.get_generation_by_id(
                     generation_id)
                 if not stored_generation_data:
