@@ -31,3 +31,74 @@ class ProjectService:
                 return project_obj
         except Exception as exc:
             raise exc
+
+    @staticmethod
+    def read_all_projects():
+        """
+        Reads all projects from the database.
+
+        Returns: List[Project]: A list of Project objects.
+
+        Raises: Exception: If an error occurs while reading projects from the database.
+        """
+        try:
+            with SessionLocal() as db:
+                project_repository = ProjectRepository(db, Project)
+            return project_repository.read_all()
+        except Exception as exc:
+            raise exc
+
+    @staticmethod
+    def read_project_by_id(project_id: str):
+        """
+        Reads a project from the database by its ID.
+
+        Param project_id: str: The ID of the project to read.
+
+        Returns: Project: The project with the specified ID.
+
+        Raises: Exception: If an error occurs while reading the project from the database.
+        """
+        try:
+            with SessionLocal() as db:
+                project_repository = ProjectRepository(db, Project)
+            return project_repository.read_by_id(project_id)
+        except Exception as exc:
+            raise exc
+
+    @staticmethod
+    def read_project_by_title(project_title: str):
+        """
+        Reads a project from the database by its title or part of title.
+
+        Param project_title: str: The title or part of title of the project to read.
+
+        Returns: Project: The project with the provided title if exists.
+
+        Raises: Exception: If an error occurs while reading the project from the database.
+        """
+        try:
+            with SessionLocal() as db:
+                project_repository = ProjectRepository(db, Project)
+            return project_repository.read_project_by_part_of_title(project_title)
+        except Exception as exc:
+            raise exc
+
+    @staticmethod
+    def update_project_by_id(project_id: str, project):
+        """
+        Update a project data from the database by provided project_id.
+
+        Param project_id: str: The ID of the project to update.
+
+        Returns: Project: The project with the provided title if exists.
+
+        Raises: Exception: If an error occurs while reading the project from the database.
+        """
+        try:
+            with SessionLocal() as db:
+                project_repository = ProjectRepository(db, Project)
+                project_obj = project_repository.read_by_id(project_id)
+            return project_repository.update(project_obj, project)
+        except Exception as exc:
+            raise exc

@@ -19,6 +19,7 @@ class ProjectSchema(BaseModel):
     class Config:
         orm_mode = True
 
+
 class ProjectSchemaIn(BaseModel):
     """Base Project schema for input"""
     project_title: str
@@ -29,12 +30,13 @@ class ProjectSchemaIn(BaseModel):
     class Config:
         orm_mode = True
 
+
 class ProjectSchemaUpdate(BaseModel):
-    """Base Project schema for input"""
-    project_title: Optional[str]
-    project_description: Optional[str]
-    due_date: Optional[str]
-    generation_id: Optional[str]
+    """Base Project schema for update"""
+    project_title: Optional[str] = None
+    project_description: Optional[str] = None
+    due_date: Optional[str] = None
+    generation_id: Optional[str] = None
 
     class Config:
         orm_mode = True
