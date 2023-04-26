@@ -55,3 +55,20 @@ class UserRepository(BaseCRUDRepository):
             self.db.rollback()
             raise exc
 
+    def read_all_active_users(self, active=True):
+        """
+        The read_all_active_users function returns all active users in the database. If active param is False
+        returns all inactive users.
+
+        Param active=True: Filter the users to only return active users.
+        Return: A list of users that are active.
+        """
+        try:
+            users = self.db.query(User).filter(User.is_active == active).all()
+            return users
+        except Exception as exc:
+            self.db.rollback()
+            raise exc
+
+
+
