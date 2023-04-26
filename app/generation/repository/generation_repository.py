@@ -58,7 +58,7 @@ class GenerationRepository(BaseCRUDRepository):
         if generation is None:
             raise GenerationNotFound(f"Generation with provided name: {generation_name} not found.", 404)
         return generation
-
+    
 
     def get_all_generations(self):
         generations = self.db.query(Generation).all()

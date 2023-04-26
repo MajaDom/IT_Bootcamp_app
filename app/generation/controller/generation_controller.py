@@ -3,6 +3,7 @@ from app.generation.exceptions import GenerationNotFound, GenerationExists
 from fastapi import HTTPException, Response
 
 
+
 class GenerationController:
 
     @staticmethod
@@ -37,6 +38,7 @@ class GenerationController:
             raise HTTPException(status_code=e.code, detail=e.message)
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
+
 
     @staticmethod
     def get_all_generations():
