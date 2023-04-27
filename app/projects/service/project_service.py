@@ -102,3 +102,12 @@ class ProjectService:
             return project_repository.update(project_obj, project)
         except Exception as exc:
             raise exc
+
+    @staticmethod
+    def delete_project_by_id(project_id: str):
+        try:
+            with SessionLocal() as db:
+            project_repository = ProjectRepository(db, Project)
+            return project_repository.delete(project_id)
+        except Exception as exc:
+            raise exc
