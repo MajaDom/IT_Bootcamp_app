@@ -2,6 +2,7 @@
 
 from sqlalchemy.exc import IntegrityError
 from typing import Union
+from app.consultations.models import Consultation
 
 from app.base import BaseCRUDRepository, AppException
 
@@ -9,7 +10,7 @@ from app.base import BaseCRUDRepository, AppException
 class ConsultationRepository(BaseCRUDRepository):
     """Repository for Consultation Model"""
 
-    def create(self, attributes: dict) -> BaseCRUDRepository:
+    def create(self, attributes: dict) -> Consultation:
         """
         The create function creates a new consultation in the database.
         It takes an attributes dictionary as its only parameter, and returns the created Consultation object.
@@ -23,7 +24,7 @@ class ConsultationRepository(BaseCRUDRepository):
             self.db.rollback()
             raise AppException(message="Something went wrong.", code=400) from exc
 
-    def read_all(self) -> list[BaseCRUDRepository]:
+    def read_all(self) -> list[Consultation]:
         """
         Read all function returns all consultations from the database.
         """
@@ -33,7 +34,7 @@ class ConsultationRepository(BaseCRUDRepository):
             self.db.rollback()
             raise AppException(message="Something went wrong.", code=400) from exc
 
-    def read_by_id(self, model_id: Union[str, int]) -> BaseCRUDRepository:
+    def read_by_id(self, model_id: Union[str, int]) -> Consultation:
         """
         Function read_by_id returns one consultation from the database based on provided id.
         """
@@ -43,7 +44,7 @@ class ConsultationRepository(BaseCRUDRepository):
             self.db.rollback()
             raise AppException(message="Something went wrong.", code=400) from exc
 
-    def update(self, db_obj, updates: dict) -> BaseCRUDRepository:
+    def update(self, db_obj, updates: dict) -> Consultation:
         """
         Function update updates desired consultation
         """
