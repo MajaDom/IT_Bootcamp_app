@@ -55,5 +55,5 @@ def get_jwt_token(request: Request) -> dict:
     try:
         decoded_token = decode_jwt(token)
     except InvalidTokenException as exc:
-        raise InvalidTokenException()
+        raise InvalidTokenException from exc
     return decoded_token

@@ -16,8 +16,10 @@ class Consultation(Base):
     date_confirmed = Column(DateTime, default=None)  # automatically filled when the status changes
     date_scheduled = Column(DateTime, default=None)  # date of the consultation
     status = Column(Boolean, default=False)  # consultation confirmation
+
     is_active = Column(Boolean, default=True)  # when the schedule date has passed, is_active is automatically False
 
+    confirmed_by = Column(String(40), ForeignKey("users.id"), default=None)
     user_id = Column(String(40), ForeignKey("users.id"), nullable=False)
     # user = relationship("User", back_populates="consultation") # TODO add relationship User
 

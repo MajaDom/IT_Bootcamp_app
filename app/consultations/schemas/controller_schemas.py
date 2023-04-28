@@ -1,4 +1,6 @@
 from pydantic import BaseModel, UUID4
+from datetime import datetime
+from typing import Optional
 
 
 class ConsultationSchema(BaseModel):
@@ -6,11 +8,12 @@ class ConsultationSchema(BaseModel):
     topic: str
     description: str
     user_id: str
-    date_inquired: str
-    date_confirmed: str
-    date_scheduled: str
+    date_inquired: datetime
+    date_confirmed: Optional[datetime]
+    date_scheduled: Optional[datetime]
     status: bool
     is_active: bool
+    confirmed_by: Optional[str]
 
     class Config:
         orm_mode = True
@@ -22,4 +25,24 @@ class ConsultationSchemaIN(BaseModel):
 
     class Config:
         orm_mode = True
+        schema_extra = {
+            "example": {
+                "topic": "Algorithms",
+                "description": "Help with binary search"
+            }
+        }
+
+
+class ConsultationSchemaUpdate(BaseModel):
+    topic: Optional[str]
+    description: Optional[str]
+    date_scheduled: Optional[str]
+    status: bool
+
+    class Config:
+        orm_mode = True
+
+
+
+
 
