@@ -64,7 +64,18 @@ class SectionController:
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
         
-#TO DO: make update section by id, to update only certain attributes
+
+    @staticmethod
+    def update_section_by_id(section_id: str, section):
+  
+        try:
+            SectionServices.update_section_by_id(section_id, section)        
+            return Response(content=f"Section with id - {section_id} is updated")
+        except SectionNotFound as e:
+            raise HTTPException(status_code=e.code, detail=e.message)
+        except Exception as e:
+            raise HTTPException(status_code=400, detail=str(e))
+
 
     @staticmethod
     def delete_section_by_id(section_id: str):

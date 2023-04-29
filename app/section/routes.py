@@ -29,6 +29,10 @@ def get_all_sections():
 def update_section_title_by_id(section_id, new_section_title):
     return SectionController.update_section_title_by_id(section_id, new_section_title)
 
+@section_router.patch("/update-section", response_model = SectionSchema) 
+def update_section_by_id(section_id: str, section: UpdateSectionSchemaIn):
+    return SectionController.update_section_by_id(section_id, section)
+
 @section_router.delete("/")
 def delete_section_by_id(section_id: str):
     return SectionController.delete_section_by_id(section_id)
