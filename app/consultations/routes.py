@@ -19,3 +19,10 @@ def create_new_consultation(request: Request, consultation: ConsultationSchemaIN
                          response_model=ConsultationSchema)
 def read_all_consultations():
     return ConsultationController.read_all_consultations()
+
+
+@consultation_router.put("/update-consultation", response_model=ConsultationSchema,
+                         dependencies=[Depends(JWTBearer(["regular_user"]))])
+def update_consultation(request: Request, consultation_id: int, consultation: ConsultationSchemaUpdate):
+    updates = consultation.dict(exclude_unset=True, exclude_none=True)
+    return ConsultationController.update_consultation(consultation_id=consultation_id, updates=updates, request=request)

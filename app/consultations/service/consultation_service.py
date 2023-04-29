@@ -26,3 +26,19 @@ class ConsultationService:
         except Exception as exc:
             raise exc
 
+    @staticmethod
+    def update_consultation(consultation_id: int, updates: dict):
+        try:
+            with SessionLocal() as db:
+                repository = ConsultationRepository(db, Consultation)
+                db_obj = repository.read_by_id(model_id=consultation_id)
+                consultation = repository.update(db_obj=db_obj, updates=updates)
+            return consultation
+        except Exception as exc:
+            raise exc
+
+
+
+                
+
+
