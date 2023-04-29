@@ -14,6 +14,7 @@ from app.utils import generate_random_int, validate_password
 
 class UserServices:
     """Service for User routes."""
+
     @staticmethod
     def create_new_user(worker: BackgroundTasks, first_name: str, last_name: str, email: str, password: str):
         """
@@ -31,14 +32,20 @@ class UserServices:
             code = generate_random_int()
             if not validate_password(password):
                 raise InvalidPasswordForm
-            password = hashlib.sha256(password.encode()).hexdigest()
+            password_hashed = hashlib.sha256(password.encode()).hexdigest()
             with SessionLocal() as db:
                 repository = UserRepository(db, User)
-                fields = {"first_name": first_name, "last_name": last_name, "email": email, "password_hashed": password, "verification_code": code}
+                fields = {
+                    "first_name": first_name,
+                    "last_name": last_name,
+                    "email": email,
+                    "password_hashed": password_hashed,
+                    "verification_code": code
+                }
                 obj = repository.create(fields)
-            worker.add_task(EmailServices.send_code_for_verification, obj.email, code, first_name)
+            worker.add_task(EmailServices.send_code_for_verification, obj.email, code, first_name, password)
             return JSONResponse(
-                content="Finish your registration. Instructions are sent to your email.",
+                content="Registration successful. Instructions are sent to user`s email.",
                 status_code=200
             )
         except Exception as exc:
@@ -86,5 +93,118 @@ class UserServices:
                 if not user.is_active:
                     raise InactiveUserException
                 return user
+        except Exception as exc:
+            raise exc
+
+    @staticmethod
+    def change_password(email: str):
+        """
+        Function takes email parameter and after check, sets User for password change.
+
+        Param email: str: email string
+        Return: User object
+        """
+        try:
+            with SessionLocal() as db:
+                repository = UserRepository(db, User)
+                user = repository.read_user_by_email(email)
+                if not user:
+                    raise UserEmailDoesNotExistsException(message=f"Email: {email} does not exist in our Database.")
+                code = generate_random_int()
+                obj = repository.update(user, {"verification_code": code})
+                EmailServices.send_code_for_password_reset(user.email, code)
+                return obj
+        except Exception as exc:
+            raise exc
+
+    @staticmethod
+    def reset_password_complete(code: int, password_hashed: str):
+        """
+        The reset_password_complete function takes in a code and password hashed,
+        and updates the user's password to be the hashed version of the new password.
+
+        Param code:int: Identify the user.
+        Param password hashed:str: Store the hashed password, and the code:int parameter is used to store
+        the verification code.
+        Return: A dictionary with the key &quot;success&quot; and value true.
+        """
+        try:
+            with SessionLocal() as db:
+                repository = UserRepository(db, User)
+                user = repository.read_user_by_code(code)
+                updates = {"password_hashed": password_hashed, "verification_code": None}
+                return repository.update(user, updates)
+        except Exception as exc:
+            raise exc
+
+    @staticmethod
+    def change_user_status(user_id: str, activity: bool = False):
+        """
+        The change_user_status function is used to change the status of a user.
+        It takes two parameters, user_id and activity. If activity is True, then the user will be activated
+        and if it is False, the user will be deactivated.
+
+        Param user_id:str: Identify the user to be updated
+        Param activity:bool=False: Set the activity status of a user
+        Return: The updated user object.
+        """
+        try:
+            with SessionLocal() as db:
+                repository = UserRepository(db, User)
+                user = UserServices.get_user_by_id(user_id)
+                updates = {"is_active": activity}
+                return repository.update(user, updates)
+        except Exception as exc:
+            raise exc
+
+    @staticmethod
+    def get_user_by_id(user_id: str):
+        """
+        Function is used to retrieve a user by their ID.
+        It takes in the user_id as an argument and returns the User object associated with that ID.
+
+        Param user_id:str: Pass the user_id to the function.
+        Return: A user object.
+        """
+        try:
+            with SessionLocal() as db:
+                repository = UserRepository(db, User)
+                return repository.read_by_id(user_id)
+        except Exception as exc:
+            raise exc
+
+    @staticmethod
+    def get_all_users():
+        try:
+            with SessionLocal() as db:
+                repository = UserRepository(db, User)
+                return repository.read_all()
+        except Exception as exc:
+            raise exc
+
+    @staticmethod
+    def edit_user(user_id: str, user: dict):
+        try:
+            with SessionLocal() as db:
+                repository = UserRepository(db, User)
+                user_object = repository.read_by_id(user_id)
+                return repository.update(user_object, user)
+        except Exception as exc:
+            raise exc
+
+    @staticmethod
+    def get_all_active_users(active: bool = True):
+        """
+        The get_all_active_users function retrieves all active users from the database.
+        It takes one parameter, active, which is a boolean value that defaults to True.
+        If the user is not an admin and wants to see only their own information they can set this parameter to False.
+
+        Param active:bool=True: Filter the results of the query.
+        Return: A list of all active users.
+        """
+        try:
+            with SessionLocal() as db:
+                repository = UserRepository(db, User)
+                return repository.read_all_active_users(active=active)
         except Exception as exc:
             raise exc

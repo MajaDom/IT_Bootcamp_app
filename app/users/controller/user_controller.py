@@ -68,3 +68,109 @@ class UserController:
             raise HTTPException(status_code=exc.code, detail=exc.message, headers=exc.headers) from exc
         except Exception as exc:
             raise HTTPException(status_code=500, detail=str(exc)) from exc
+
+    @staticmethod
+    def change_password(email: str):
+        """
+        Function is used to change the password of a user.
+        It takes in an email as a parameter and returns the verification code
+        that was sent to the user's email address.
+
+        Param email:str: Get the user by email.
+        Return: A verification code.
+        """
+        try:
+            return UserServices.change_password(email)
+        except AppException as exc:
+            raise HTTPException(status_code=exc.code, detail=exc.message) from exc
+        except Exception as exc:
+            raise HTTPException(status_code=500, detail=str(exc)) from exc
+
+    @staticmethod
+    def reset_password_complete(code: int, password_hashed: str):
+        """
+        The reset_password_complete function takes in a code and password hashed,
+        and returns the user object associated with that code. If no user is found,
+        it raises an HTTPException with status_code 404. If there is an error in
+        the database query or if the password does not match the hashed version of
+        the new password, it raises an HTTPException with status_code 400.
+
+        Param code:int: Identify the user who is trying to reset their password
+        Param password-hashed:str: Store the hashed password
+        Return: The user object.
+        """
+        try:
+            user = UserServices.reset_password_complete(code, password_hashed)
+            return user
+        except AppException as exc:
+            raise HTTPException(status_code=exc.code, detail=exc.message) from exc
+        except Exception as exc:
+            raise HTTPException(status_code=500, detail=str(exc)) from exc
+
+    @staticmethod
+    def change_user_status(user_id: str, activity: bool = False):
+        """
+        Function is used to deactivate a user.
+        It takes in the user_id of the user that needs to be
+        deactivated and returns the updated User object.
+
+        Param user_id:str: Identify the user
+        Param activity:bool=False: Determine if the user is active or not
+        Return: The user object that was deactivated.
+        """
+        try:
+            user = UserServices.change_user_status(user_id, activity)
+            return user
+        except AppException as exc:
+            raise HTTPException(status_code=exc.code, detail=exc.message) from exc
+        except Exception as exc:
+            raise HTTPException(status_code=500, detail=str(exc)) from exc
+
+    @staticmethod
+    def get_all_users():
+        try:
+            users = UserServices.get_all_users()
+            return users
+        except AppException as exc:
+            raise HTTPException(status_code=exc.code, detail=exc.message) from exc
+        except Exception as exc:
+            raise HTTPException(status_code=500, detail=str(exc)) from exc
+
+    @staticmethod
+    def get_user_by_id(user_id: str):
+        try:
+            user = UserServices.get_user_by_id(user_id)
+            return user
+        except AppException as exc:
+            raise HTTPException(status_code=exc.code, detail=exc.message) from exc
+        except Exception as exc:
+            raise HTTPException(status_code=500, detail=str(exc)) from exc
+
+    @staticmethod
+    def edit_user(user_id: str, user: dict):
+        try:
+            user = UserServices.edit_user(user_id, user)
+            return user
+        except AppException as exc:
+            raise HTTPException(status_code=exc.code, detail=exc.message) from exc
+        except Exception as exc:
+            raise HTTPException(status_code=500, detail=str(exc)) from exc
+
+    @staticmethod
+    def get_all_active_users(active=True):
+        """
+        The get_all_active_users function retrieves all active users from the database.
+        It takes an optional parameter, active, which defaults to True. If it is set to False,
+        it will retrieve all inactive users instead.
+
+        Param active=True: Filter the users by their active status.
+        Return: A list of users that are active.
+        """
+        try:
+            users = UserServices.get_all_active_users(active=active)
+            return users
+        except AppException as exc:
+            raise HTTPException(status_code=exc.code, detail=exc.message) from exc
+        except Exception as exc:
+            raise HTTPException(status_code=500, detail=str(exc)) from exc
+
