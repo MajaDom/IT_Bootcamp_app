@@ -25,6 +25,11 @@ class SectionRepository(BaseCRUDRepository):
             raise SectionNotFound(f"Section with provided name: {section_name} not found.", 404)
         return section
     
+    def get_section_by_name_partially(self, section_name: str):
+        
+        section = self.db.query(Section).filter(Section.section_title.ilike(f"%{section_name}%")).all()
+        return section
+        
     def get_all_sections(self):
         sections = self.db.query(Section).all()
         return sections
@@ -44,7 +49,21 @@ class SectionRepository(BaseCRUDRepository):
         except Exception as e:
             raise e
         
-    #TO DO: make update section by id, to update only certain attributess
+    
+
+    def update_section_by_id(self, section_id, section_title, start_date, end_date, generation_id):
+        try:
+            section = self.db.query(Section).filter(Section.id == section_id).first()
+            section.section_title = section_title
+            section.start_date = start_date
+            section.end_date = end_date
+            section.generation_id = generation_id
+            self.db.add(section)
+            self.db.commit()
+            self.db.refresh(section)
+            return section
+        except IntegrityError as e:
+            raise e
 
     def delete_section_by_id(self, section_id: str):
         try:
