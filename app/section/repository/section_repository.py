@@ -25,6 +25,12 @@ class SectionRepository(BaseCRUDRepository):
             raise SectionNotFound(f"Section with provided name: {section_name} not found.", 404)
         return section
     
+    def get_section_by_name_partially(self, section_name: str):
+        
+        section = self.db.query(Section).filter(Section.section_title.ilike(f"%{section_name}%")).all()
+        return section
+        
+
     def get_all_sections(self):
         sections = self.db.query(Section).all()
         return sections

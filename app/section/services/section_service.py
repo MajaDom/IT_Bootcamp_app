@@ -33,6 +33,16 @@ class SectionServices:
                 return section_repository.get_section_by_name(section_name=section_name)
             except Exception as e:
                 raise e
+            
+    @staticmethod
+    def get_section_by_name_partially(section_name: str):
+        try:
+            with SessionLocal() as db:
+                repository = SectionRepository(db,Section)
+                return repository.get_section_by_name_partially(section_name)
+        except Exception as e:
+            raise e
+
 
     @staticmethod
     def get_all_sections():

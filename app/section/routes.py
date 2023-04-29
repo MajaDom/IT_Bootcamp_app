@@ -17,6 +17,10 @@ def get_section_by_id(section_id: str):
 def get_section_by_name(section_name: str):
     return SectionController.get_section_by_name(section_name)  
 
+@section_router.get("/get-section_by_name-partially", response_model=list[SectionSchema])
+def get_section_by_name_partially(section_name: str):
+    return SectionController.get_section_by_name_partially(section_name)
+
 @section_router.get("/get-all-sections", response_model=list[SectionSchema])
 def get_all_sections():
     return SectionController.get_all_sections()
