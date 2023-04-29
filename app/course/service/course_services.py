@@ -8,13 +8,15 @@ from fastapi.encoders import jsonable_encoder
 class CourseServices:
     @staticmethod
     def create_course(course_name, course_description):
-        try:
-            with SessionLocal() as db:
-                course_repository = CourseRepository(db)
-                c = course_repository.create_course(course_name, course_description)
-                return c     
-        except Exception as e:
-            raise e
+        with SessionLocal() as db:
+            try:
+                course_repository = CourseRepository(db, Course)
+                fields = {"course_name": course_name, "course_description": course_description}
+                obj = course_repository.create(fields)
+                return obj       
+            except Exception as e:
+                raise e
+
 
     @staticmethod
     def get_course_by_id(course_id: str):

@@ -1,23 +1,18 @@
+from re import I
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy.orm import Session
 from app.course.models import Course
 from app.course.exceptions import CourseNotFound
+from app.base.base_repository import BaseCRUDRepository
+from app.base.base_exception import AppException
 
-class CourseRepository:
+class CourseRepository(BaseCRUDRepository):
 
-    def __init__(self, db: Session):
-        self.db = db
-
-    def create_course(self, course_name, course_description): 
-
+    def create(self, attributes: dict):
         try:
-            course = Course(course_name, course_description)
-            self.db.add(course)
-            self.db.commit()
-            self.db.refresh(course)
-            return course
-        except IntegrityError as e:
-            raise e
+            return super().create(attributes)
+        except IntegrityError as exc:
+            self.db.rollback()
+            raise AppException(message="Course with this id is already registered.", code=400) from exc
 
     def get_course_by_id(self, course_id: str):
     

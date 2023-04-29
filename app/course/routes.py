@@ -11,7 +11,6 @@ def create_course(course: CourseSchemaIn):
     return CourseController.create_course(course.course_name, course.course_description) 
 
 
-
 @course_router.get("/id", response_model=CourseSchema)
 def get_course_by_id(course_id: str):
     return CourseController.get_course_by_id(course_id)    

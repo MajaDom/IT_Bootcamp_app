@@ -17,6 +17,7 @@ class CourseController:
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
 
+
     @staticmethod
     def get_course_by_id(course_id: str):
         try:
