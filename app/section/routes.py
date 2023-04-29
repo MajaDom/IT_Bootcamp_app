@@ -17,6 +17,10 @@ def get_section_by_id(section_id: str):
 def get_section_by_name(section_name: str):
     return SectionController.get_section_by_name(section_name)  
 
+@section_router.get("/get-section_by_name-partially", response_model=list[SectionSchema])
+def get_section_by_name_partially(section_name: str):
+    return SectionController.get_section_by_name_partially(section_name)
+
 @section_router.get("/get-all-sections", response_model=list[SectionSchema])
 def get_all_sections():
     return SectionController.get_all_sections()
@@ -24,6 +28,10 @@ def get_all_sections():
 @section_router.put("/update-section-title-by-id", response_model=SectionSchema)
 def update_section_title_by_id(section_id, new_section_title):
     return SectionController.update_section_title_by_id(section_id, new_section_title)
+
+@section_router.patch("/update-section", response_model = SectionSchema) 
+def update_section_by_id(section_id: str, section: UpdateSectionSchemaIn):
+    return SectionController.update_section_by_id(section_id, section)
 
 @section_router.delete("/")
 def delete_section_by_id(section_id: str):
