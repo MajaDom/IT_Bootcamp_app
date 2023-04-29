@@ -69,6 +69,3 @@ class UserRepository(BaseCRUDRepository):
         except Exception as exc:
             self.db.rollback()
             raise exc
-
-
-

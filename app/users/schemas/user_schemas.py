@@ -12,6 +12,7 @@ class UserSchema(BaseModel):
     password_hashed: str
     is_active: bool
     is_superuser: bool
+    is_employee: bool
     verification_code: Optional[int]
 
     class Config:
@@ -27,6 +28,7 @@ class UserSchemaOut(BaseModel):
     email: str
     is_active: bool
     is_superuser: bool
+    is_employee: bool
     verification_code: Optional[int]
 
     class Config:

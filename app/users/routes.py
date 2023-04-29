@@ -36,7 +36,7 @@ def register(user: UserRegistrationSchema, worker: BackgroundTasks):
 
 
 @user_router.patch("/email-verification", summary="User Verification", status_code=status.HTTP_200_OK)
-def verify_user(verification_code: int = Body(embed=True)):
+def verify_user(worker: BackgroundTasks, verification_code: int = Body(embed=True)):
     """
     Function verifies a user's account by verifying the verification code sent to their email.
     The function returns a response with the content 'Account verified. You can log in now' and status code 200 if
@@ -45,7 +45,7 @@ def verify_user(verification_code: int = Body(embed=True)):
     Param verification_code:int: Verify the user's account.
     Return: A response object.
     """
-    UserController.verify_user(verification_code)
+    UserController.verify_user(verification_code, worker)
     return JSONResponse(content="Account verified. You can log in now", status_code=200)
 
 
@@ -70,7 +70,7 @@ def login_user(login: UserLoginSchema, response: JSONResponse):
 
 @user_router.patch("/reset-password",
                    summary="Reset user's password. User route.",
-                   dependencies=[Depends(JWTBearer(["super_user", "regular_user"]))]
+                   dependencies=[Depends(JWTBearer(["super_user", "student", "employee"]))]
                    )
 def reset_password(request: Request, email: str = Body(embed=True)):
     """
@@ -147,6 +147,20 @@ def logout(request: Request, response: JSONResponse):
     return {"message": "success"}
 
 
+@user_router.patch("/employee-registration",
+                   summary="Register employees.",
+                   dependencies=[Depends(JWTBearer(["super_user"]))],
+                   response_model=UserSchemaOut)
+def register_employee(user_id: str = Body(embed=True)):
+    """
+    Function takes a user ID as an argument and sets user's status as employee.
+
+    Param user_id: ID of user.
+    Return: UserSchemaOut
+    """
+    return UserController.register_employee(user_id)
+
+
 @user_router.patch("/deactivation",
                    summary="Deactivate user. Admin route.",
                    dependencies=[Depends(JWTBearer(["super_user"]))],
@@ -177,7 +191,7 @@ def activate_user(user_id: str = Body(embed=True)):
 
 @user_router.get("/",
                  summary="Get all users.",
-                 dependencies=[Depends(JWTBearer(["super_user"]))],
+                 dependencies=[Depends(JWTBearer(["super_user", "employee"]))],
                  response_model=List[UserSchemaOut])
 def get_all_users():
     return UserController.get_all_users()
@@ -193,7 +207,7 @@ def get_user_by_id(user_id: str):
 
 @user_router.put("/",
                  summary="Edit user.",
-                 dependencies=[Depends(JWTBearer(["regular_user", "super_user"]))],
+                 dependencies=[Depends(JWTBearer(["regular_user", "super_user", "employee"]))],
                  response_model=UserSchema)
 def edit_user(request: Request, user: UserUpdateSchema):
     user_id = request.cookies.get("user_id")
@@ -204,7 +218,7 @@ def edit_user(request: Request, user: UserUpdateSchema):
 @user_router.get("/all-active-users",
                  response_model=list[UserSchemaOut],
                  summary="Get all active users. Admin route.",
-                 dependencies=[Depends(JWTBearer(["super_user"]))])
+                 dependencies=[Depends(JWTBearer(["super_user", "employee"]))])
 def get_all_active_users():
     """
     Function returns a list of all active users.

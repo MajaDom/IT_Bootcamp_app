@@ -52,7 +52,7 @@ class UserServices:
             raise exc
 
     @staticmethod
-    def verify_user(verification_code: int):
+    def verify_user(verification_code: int, worker: BackgroundTasks):
         """
         Function is used to verify a user's email address.
         It takes in a verification code and checks the database for that code.
@@ -67,6 +67,7 @@ class UserServices:
                 user = repository.read_user_by_code(verification_code)
                 if user:
                     obj = repository.update(user, {"verification_code": None})
+                    worker.add_task(EmailServices.send_confirmation, obj.email, user.first_name)
                 return obj
         except Exception as exc:
             raise exc
@@ -133,6 +134,26 @@ class UserServices:
                 repository = UserRepository(db, User)
                 user = repository.read_user_by_code(code)
                 updates = {"password_hashed": password_hashed, "verification_code": None}
+                return repository.update(user, updates)
+        except Exception as exc:
+            raise exc
+
+    @staticmethod
+    def register_employee(user_id: str, activity: bool = True):
+        """
+        Function is used to change the status of a user.
+        It takes two parameters, user_id and activity. If activity is True,
+        then the user will be set as employee.
+
+        Param user_id:str: Identify the user to be updated.
+        Param activity:bool=False: Set the employee status of a user.
+        Return: The updated user object.
+        """
+        try:
+            with SessionLocal() as db:
+                repository = UserRepository(db, User)
+                user = repository.read_by_id(user_id)
+                updates = {"is_employee": activity}
                 return repository.update(user, updates)
         except Exception as exc:
             raise exc

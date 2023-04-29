@@ -30,7 +30,7 @@ class UserController:
             raise HTTPException(status_code=500, detail=str(exc)) from exc
 
     @staticmethod
-    def verify_user(verification_code: int):
+    def verify_user(verification_code: int, worker):
         """
         Function is used to verify a user's email address.
         It takes in an integer as a verification code and returns
@@ -40,7 +40,7 @@ class UserController:
         Return: A user object.
         """
         try:
-            user = UserServices.verify_user(verification_code)
+            user = UserServices.verify_user(verification_code, worker)
             return user
         except AppException as exc:
             raise HTTPException(status_code=exc.code, detail=exc.message) from exc
@@ -62,7 +62,9 @@ class UserController:
             user = UserServices.login_user(email, password)
             if user.is_superuser:
                 return sign_jwt(user.id, "super_user"), user.id
-            return sign_jwt(user.id, "regular_user"), user.id
+            elif user.is_employee:
+                return sign_jwt(user.id, "employee")
+            return sign_jwt(user.id, "student"), user.id
 
         except AppException as exc:
             raise HTTPException(status_code=exc.code, detail=exc.message, headers=exc.headers) from exc
@@ -108,15 +110,33 @@ class UserController:
             raise HTTPException(status_code=500, detail=str(exc)) from exc
 
     @staticmethod
+    def register_employee(user_id: str, activity: bool = True):
+        """
+        Function is used to register or unregister an employee.
+
+        Param user_id: User's ID.
+        Param activity: Set employee's status to True or False
+        Return: user's object.
+        """
+        try:
+            user = UserServices.register_employee(user_id, activity)
+            return user
+        except AppException as exc:
+            raise HTTPException(status_code=exc.code, detail=exc.message) from exc
+        except Exception as exc:
+            raise HTTPException(status_code=500, detail=str(exc)) from exc
+
+
+    @staticmethod
     def change_user_status(user_id: str, activity: bool = False):
         """
-        Function is used to deactivate a user.
+        Function is used to activate/deactivate a user.
         It takes in the user_id of the user that needs to be
-        deactivated and returns the updated User object.
+        (de)activated and returns the updated User object.
 
         Param user_id:str: Identify the user
-        Param activity:bool=False: Determine if the user is active or not
-        Return: The user object that was deactivated.
+        Param activity:bool=False: Set user's status.
+        Return: The user object that was (de)activated.
         """
         try:
             user = UserServices.change_user_status(user_id, activity)

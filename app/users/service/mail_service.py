@@ -6,7 +6,8 @@ from pydantic import EmailStr
 
 from app.config import settings
 from app.email_templates.user_registration_template import html_first_part, html_second_part, html_third_part
-from app.email_templates.password_reset_template import html_first_part, html_second_part
+from app.email_templates.password_reset_template import first_part, second_part
+from app.email_templates.account_verified import start, end
 
 
 class EmailServices:
@@ -58,9 +59,22 @@ class EmailServices:
         Param code:int: Send the code to the user.
         Return: A future object.
         """
-        html = html_first_part + f"<strong>{str(code)}</strong>" + html_second_part
+        html = first_part + f"<strong>{str(code)}</strong>" + second_part
         message = MessageSchema(
             subject="Reset Password.",
+            recipients=[email],
+            body=html,
+            subtype=MessageType.html,
+        )
+        fm = FastMail(EmailServices.conf)
+        asyncio.run(fm.send_message(message))
+        return
+
+    @staticmethod
+    def send_confirmation(email: EmailStr, first_name: str):
+        html = start + f"<h2>Hello {first_name},</h2>" + end
+        message = MessageSchema(
+            subject="Welcome.",
             recipients=[email],
             body=html,
             subtype=MessageType.html,
