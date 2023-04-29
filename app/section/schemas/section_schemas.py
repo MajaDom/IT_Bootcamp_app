@@ -26,3 +26,9 @@ class SectionSchemaIn(BaseModel):
     
     class Config:
         orm_mode = True
+
+class UpdateSectionSchemaIn(BaseModel):
+    section_title: str | None = None
+    start_date: date | None = None
+    end_date: date | None = None
+    generation_id: str | None = None
