@@ -37,7 +37,7 @@ class SectionController:
             raise HTTPException(status_code=e.code, detail=e.message)
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
-
+        
     @staticmethod
     def get_section_by_name_partially(section_name: str):
         try:

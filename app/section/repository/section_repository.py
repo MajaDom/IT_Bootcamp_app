@@ -30,7 +30,6 @@ class SectionRepository(BaseCRUDRepository):
         section = self.db.query(Section).filter(Section.section_title.ilike(f"%{section_name}%")).all()
         return section
         
-
     def get_all_sections(self):
         sections = self.db.query(Section).all()
         return sections
