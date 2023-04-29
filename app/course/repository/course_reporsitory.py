@@ -39,6 +39,35 @@ class CourseRepository:
         course = self.db.query(Course).all()
         return course
 
+
+
+    # def update_course_name(self, course_id: str, new_name: str):
+
+    #     try:
+    #         course = self.db.query(Course).filter(Course.id == course_id).first()
+    #         if course is None:
+    #             raise CourseNotFound(f"Course with provided ID: {course_id} not found", 404) 
+    #         course.course_name = new_name
+    #         self.db.add(course)
+    #         self.db.commit()
+    #         self.db.refresh(course)
+    #         return course
+    #     except Exception as e:
+    #         raise e
+        
+    def update_course_by_id(self, course_id, course_name, course_description):
+            try:
+                course = self.db.query(Course).filter(Course.id == course_id).first()
+                course.course_name = course_name
+                course.course_description = course_description
+                self.db.add(course)
+                self.db.commit()
+                self.db.refresh(course)
+                return course
+            except IntegrityError as e:
+                raise e
+    
+
     def delete_course_by_id(self, course_id: str):
 
         try:
@@ -48,19 +77,5 @@ class CourseRepository:
             self.db.delete(course)
             self.db.commit()
             return True
-        except Exception as e:
-            raise e
-
-    def update_course_name(self, course_id: str, new_name: str):
-
-        try:
-            course = self.db.query(Course).filter(Course.id == course_id).first()
-            if course is None:
-                raise CourseNotFound(f"Course with provided ID: {course_id} not found", 404) 
-            course.course_name = new_name
-            self.db.add(course)
-            self.db.commit()
-            self.db.refresh(course)
-            return course
         except Exception as e:
             raise e

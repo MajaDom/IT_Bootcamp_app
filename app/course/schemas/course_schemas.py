@@ -17,3 +17,7 @@ class CourseSchemaIn(BaseModel):
 
     class Config:
         orm_mode = True
+
+class UpdateCourseSchemaIn(BaseModel):
+    course_name: str | None = None
+    course_description: str | None = None
