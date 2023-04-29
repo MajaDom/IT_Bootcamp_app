@@ -107,7 +107,7 @@ class ProjectService:
     def delete_project_by_id(project_id: str):
         try:
             with SessionLocal() as db:
-            project_repository = ProjectRepository(db, Project)
-            return project_repository.delete(project_id)
+                project_repository = ProjectRepository(db, Project)
+                return project_repository.delete(project_id)
         except Exception as exc:
             raise exc
