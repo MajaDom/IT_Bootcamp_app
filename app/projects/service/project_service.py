@@ -111,3 +111,4 @@ class ProjectService:
                 return project_repository.delete(project_id)
         except Exception as exc:
             raise exc
+
