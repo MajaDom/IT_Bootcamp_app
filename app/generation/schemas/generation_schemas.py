@@ -1,10 +1,10 @@
-from datetime import date, datetime
-import datetime
+from datetime import date
 from pydantic import BaseModel
 from pydantic import UUID4
 from datetime import date
 from app.course.schemas import CourseSchema
 
+# The class GenerationSchema is a subclass of BaseModel in Python.
 class GenerationSchema(BaseModel):
     id: UUID4
     name: str
@@ -19,6 +19,7 @@ class GenerationSchema(BaseModel):
         orm_mode = True
 
 
+# The class GenerationSchemaIn is a data model for input parameters used in generating a schema.
 class GenerationSchemaIn(BaseModel):
     name: str
     start_date: str
@@ -29,6 +30,7 @@ class GenerationSchemaIn(BaseModel):
     class Config:
         orm_mode = True
 
+# The class UpdateGenerationSchemaIn is a BaseModel used for updating generation schema.
 class UpdateGenerationSchemaIn(BaseModel):
     name: str | None = None
     start_date: date | None = None

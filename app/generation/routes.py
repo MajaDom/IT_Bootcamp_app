@@ -1,7 +1,6 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter
 from app.generation.controller import GenerationController
 from app.generation.schemas import *
-# from app.user.controller.user_authenification_controller import JWTBearer
 
 generation_router = APIRouter(tags=["generation"], prefix="/api/generation")
 
