@@ -1,1 +1,2 @@
 from .lesson_repository import LessonRepository
+from .material_repository import MaterialRepository

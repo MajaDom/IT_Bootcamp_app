@@ -10,7 +10,7 @@ class Lesson(Base):
     """Base Model for Lesson"""
     __tablename__ = "lessons"
     id = Column(String(100), primary_key=True, default=uuid4)
-    lesson_title = Column(String(45), nullable=False)
+    lesson_title = Column(String(100), nullable=False)
     description = Column(String(500))
     content = Column(String(1000))
 
