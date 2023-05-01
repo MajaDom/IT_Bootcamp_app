@@ -1,22 +1,17 @@
-"""Repository for Consultation"""
+"""Repository for Participant"""
 
 from sqlalchemy.exc import IntegrityError
 from typing import Union
-from app.consultations.models import Consultation
+from app.participants.models import Participant
 
 from app.base import BaseCRUDRepository, AppException
 
 
-class ConsultationRepository(BaseCRUDRepository):
-    """Repository for Consultation Model"""
+class ParticipantRepository(BaseCRUDRepository):
+    """Repository for Participant Model"""
 
-    def create(self, attributes: dict) -> Consultation:
+    def create(self, attributes: dict) -> Participant:
         """
-        The create function creates a new consultation in the database.
-        It takes an attributes dictionary as its only parameter, and returns the created Consultation object.
-
-        Param attributes:dict: Pass in the attributes that are being passed into the create function.
-        Return: The created object.
         """
         try:
             return super().create(attributes)
@@ -24,20 +19,19 @@ class ConsultationRepository(BaseCRUDRepository):
             self.db.rollback()
             raise AppException(message="Something went wrong.", code=400) from exc
 
-    def read_all(self) -> list[Consultation]:
+    def read_all(self) -> list[Participant]:
         """
-        Read all function returns all consultations from the database.
+        Read all function returns all participants from the database.
         """
         try:
-            consultations = self.db.query(Consultation).all()
-            return consultations
+            return super().read_all()
         except IntegrityError as exc:
             self.db.rollback()
             raise AppException(message="Something went wrong.", code=400) from exc
 
-    def read_by_id(self, model_id: Union[str, int]) -> Consultation:
+    def read_by_id(self, model_id: Union[str, int]) -> Participant:
         """
-        Function read_by_id returns one consultation from the database based on provided id.
+        Function read_by_id returns one participant from the database based on provided id.
         """
         try:
             return super().read_by_id(model_id)
@@ -45,9 +39,20 @@ class ConsultationRepository(BaseCRUDRepository):
             self.db.rollback()
             raise AppException(message="Something went wrong.", code=400) from exc
 
-    def update(self, db_obj, updates: dict) -> Consultation:
+    def read_participants_by_consultation_id(self, consultation_id: int) -> list[Participant]:
         """
-        Function update updates desired consultation
+
+        """
+        try:
+            participants = self.db.query(Participant).filter(Participant.consultation_id == consultation_id).all()
+            return participants
+        except IntegrityError as exc:
+            self.db.rollback()
+            raise AppException(message="Something went wrong.", code=400) from exc
+
+    def update(self, db_obj, updates: dict) -> Participant:
+        """
+        Function update updates desired participant
         """
         try:
             return super().update(db_obj, updates)
@@ -57,7 +62,6 @@ class ConsultationRepository(BaseCRUDRepository):
 
     def delete(self, model_id: Union[str, int]):
         try:
-
             return super().delete(model_id)
         except IntegrityError as exc:
             self.db.rollback()

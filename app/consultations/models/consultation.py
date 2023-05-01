@@ -21,6 +21,7 @@ class Consultation(Base):
 
     confirmed_by = Column(String(40), ForeignKey("users.id"), default=None)
     user_id = Column(String(40), ForeignKey("users.id"), nullable=False)
+    consultation = relationship("Participant", back_populates="participant")
     # user = relationship("User", back_populates="consultation") # TODO add relationship User
 
     def __init__(self, topic: str, description: str, user_id: str):

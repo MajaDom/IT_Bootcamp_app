@@ -38,6 +38,14 @@ class ConsultationSchemaUpdate(BaseModel):
     description: Optional[str]
     date_scheduled: Optional[str]
     status: bool
+    schema_extra = {
+        "example": {
+            "topic": "Algorithms",
+            "description": "Help with binary search",
+            "date_scheduled": "2023-10-10 14:00:00",
+            "status": "true"
+        }
+    }
 
     class Config:
         orm_mode = True

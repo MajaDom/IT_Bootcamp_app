@@ -9,6 +9,7 @@ from app.course.routes import course_router
 from app.generation.routes import generation_router
 from app.consultations.routes import consultation_router
 from app.lessons.routes import lesson_router
+from app.participants.routes import participant_router
 
 
 Base.metadata.create_all(bind=engine)
@@ -22,6 +23,7 @@ def init_app():
     app.include_router(generation_router)
     app.include_router(project_router)
     app.include_router(lesson_router)
+    app.include_router(participant_router)
 
     return app
 
