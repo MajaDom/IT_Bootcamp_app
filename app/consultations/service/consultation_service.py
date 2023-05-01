@@ -27,6 +27,16 @@ class ConsultationService:
             raise exc
 
     @staticmethod
+    def read_consultation(consultation_id: int):
+        try:
+            with SessionLocal() as db:
+                repository = ConsultationRepository(db, Consultation)
+                consultations = repository.read_by_id(model_id=consultation_id)
+            return consultations
+        except Exception as exc:
+            raise exc
+
+    @staticmethod
     def update_consultation(consultation_id: int, updates: dict):
         try:
             with SessionLocal() as db:
@@ -36,6 +46,16 @@ class ConsultationService:
             return consultation
         except Exception as exc:
             raise exc
+
+    @staticmethod
+    def delete_consultation(consultation_id: int):
+        try:
+            with SessionLocal() as db:
+                repository = ConsultationRepository(db, Consultation)
+                return repository.delete(model_id=consultation_id)
+        except Exception as exc:
+            raise exc
+
 
 
 
