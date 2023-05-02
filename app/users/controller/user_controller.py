@@ -63,7 +63,7 @@ class UserController:
             if user.is_superuser:
                 return sign_jwt(user.id, "super_user"), user.id
             elif user.is_employee:
-                return sign_jwt(user.id, "employee")
+                return sign_jwt(user.id, "employee"), user.id
             return sign_jwt(user.id, "student"), user.id
 
         except AppException as exc:

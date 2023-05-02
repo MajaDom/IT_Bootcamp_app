@@ -46,12 +46,11 @@ class EmailServices:
         )
         fm = FastMail(EmailServices.conf)
         asyncio.run(fm.send_message(message))
-        return
 
     @staticmethod
     def send_code_for_password_reset(email: EmailStr, code: int):
         """
-        The send_code_for_password_reset function sends a code to the user's email address.
+        Function sends a code to the user's email address.
         The function takes in an email and a code as parameters, and uses them to send the user
         an HTML message containing their password reset code.
 
@@ -68,7 +67,6 @@ class EmailServices:
         )
         fm = FastMail(EmailServices.conf)
         asyncio.run(fm.send_message(message))
-        return
 
     @staticmethod
     def send_confirmation(email: EmailStr, first_name: str):
@@ -81,4 +79,3 @@ class EmailServices:
         )
         fm = FastMail(EmailServices.conf)
         asyncio.run(fm.send_message(message))
-        return
