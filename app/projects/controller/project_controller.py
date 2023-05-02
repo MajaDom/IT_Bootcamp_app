@@ -2,6 +2,7 @@
 from fastapi import HTTPException, Response
 
 from app.base import AppException
+from app.projects.exceptions import ProjectNotFoundException
 from app.projects.service import ProjectService
 
 
@@ -82,7 +83,11 @@ class ProjectController:
         """
         try:
             project = ProjectService.read_project_by_title(project_title)
-            return project
+            if project:
+                return project
+            return Response(content=f"Project with title does not exist")
+        except ProjectNotFoundException as exc:
+            raise HTTPException(status_code=exc.code, detail=exc.message) from exc
         except AppException as exc:
             raise HTTPException(status_code=exc.code, detail=exc.message) from exc
         except Exception as exc:
