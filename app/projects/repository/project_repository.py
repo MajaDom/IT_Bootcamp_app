@@ -34,7 +34,7 @@ class ProjectRepository(BaseCRUDRepository):
             project = self.db.query(Project).filter(Project.project_title.ilike(f"%{part_of_project_title}%")).limit(20).all()
             if not project:
                 self.db.rollback()
-                raise ProjectNotFoundException
+                raise ProjectNotFoundException(message="Not found", code=400)
             return project
         except Exception as exc:
             self.db.rollback()
