@@ -20,7 +20,8 @@ class Project(Base):
     generation_id = Column(String(50), ForeignKey("generation.id"), nullable=False)
     generation = relationship("Generation", lazy="subquery")
 
-    def __init__(self, project_title: str, project_description: str, due_date: str):
+    def __init__(self, project_title: str, project_description: str, due_date: str, generation_id):
         self.project_title = project_title
         self.project_description = project_description
         self.due_date = due_date
+        self.generation_id = generation_id
