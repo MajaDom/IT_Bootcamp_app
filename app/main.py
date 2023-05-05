@@ -12,7 +12,7 @@ from app.section.routes import section_router
 
 from app.consultations.routes import consultation_router
 from app.lessons.routes import lesson_router, material_router
-
+from app.user_generation.routes import user_generation_router
 
 Base.metadata.create_all(bind=engine)
 
@@ -29,7 +29,7 @@ def init_app():
     app.include_router(project_router)
     app.include_router(lesson_router)
     app.include_router(material_router)
-
+    app.include_router(user_generation_router)
 
     return app
 
