@@ -35,6 +35,15 @@ class ConsultationController:
             raise HTTPException(status_code=500, detail=str(exc)) from exc
 
     @staticmethod
+    def read_consultation(consultation_id: int):
+        try:
+            return ConsultationService.read_consultation(consultation_id=consultation_id)
+        except AppException as exc:
+            raise HTTPException(status_code=exc.code, detail=exc.message) from exc
+        except Exception as exc:
+            raise HTTPException(status_code=500, detail=str(exc)) from exc
+
+    @staticmethod
     def update_consultation(consultation_id: int, updates: dict, request: Request):
         try:
             if "status" in updates and updates["status"]:
@@ -46,3 +55,13 @@ class ConsultationController:
             raise HTTPException(status_code=exc.code, detail=exc.message) from exc
         except Exception as exc:
             raise HTTPException(status_code=500, detail=str(exc)) from exc
+
+    @staticmethod
+    def delete_consultation(consultation_id: int):
+        try:
+            return ConsultationService.delete_consultation(consultation_id=consultation_id)
+        except AppException as exc:
+            raise HTTPException(status_code=exc.code, detail=exc.message) from exc
+        except Exception as exc:
+            raise HTTPException(status_code=500, detail=str(exc)) from exc
+

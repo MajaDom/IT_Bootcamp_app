@@ -29,7 +29,8 @@ class ConsultationRepository(BaseCRUDRepository):
         Read all function returns all consultations from the database.
         """
         try:
-            return super().read_all()
+            consultations = self.db.query(Consultation).all()
+            return consultations
         except IntegrityError as exc:
             self.db.rollback()
             raise AppException(message="Something went wrong.", code=400) from exc
@@ -56,6 +57,7 @@ class ConsultationRepository(BaseCRUDRepository):
 
     def delete(self, model_id: Union[str, int]):
         try:
+
             return super().delete(model_id)
         except IntegrityError as exc:
             self.db.rollback()

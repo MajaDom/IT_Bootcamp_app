@@ -85,7 +85,7 @@ class ProjectService:
             raise exc
 
     @staticmethod
-    def update_project_by_id(project_id: str, project):
+    def update_project_by_id(project_id: str, project: dict):
         """
         Update a project data from the database by provided project_id.
 
@@ -105,6 +105,13 @@ class ProjectService:
 
     @staticmethod
     def delete_project_by_id(project_id: str):
+        """
+        Delete a project from the database by provided project_id.
+
+        Param project_id: str: The ID of the project to delete.
+
+        Raises: Exception: If an error occurs while reading the project from the database.
+        """
         try:
             with SessionLocal() as db:
                 project_repository = ProjectRepository(db, Project)
