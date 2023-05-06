@@ -7,7 +7,7 @@ from sqlalchemy.orm import relationship
 from app.db.database import Base
 
 
-class Project(Base):
+class ProjectTask(Base):
     """Base model for Project Task"""
     __tablename__ = "project_tasks"
 
