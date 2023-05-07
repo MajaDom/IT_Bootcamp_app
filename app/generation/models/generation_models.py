@@ -19,7 +19,7 @@ class Generation(Base):
     course_id = Column(String(45), ForeignKey("course.id"))
     course = relationship("Course", lazy='subquery')
 
-    def __init__(self, name: str, start_date: str, end_date: str, is_active: bool, course_id ):
+    def __init__(self, name: str, start_date: str, end_date: str, is_active: bool, course_id: str):
         self.name = name
         self.start_date = datetime.strptime(start_date, "%Y-%m-%d")
         self.end_date = datetime.strptime(end_date, "%Y-%m-%d")
