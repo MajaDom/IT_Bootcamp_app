@@ -11,6 +11,7 @@ from app.section.routes import section_router
 from app.consultations.routes import consultation_router
 from app.participants.routes import participant_router
 from app.lessons.routes import lesson_router, material_router
+from app.user_generation.routes import user_generation_router
 from app.user_projects.routes import user_projects_router
 from app.homeworks.routes import homework_router
 
@@ -29,9 +30,9 @@ def init_app():
     app.include_router(lesson_router)
     app.include_router(participant_router)
     app.include_router(material_router)
+    app.include_router(user_generation_router)
     app.include_router(homework_router)
     app.include_router(user_projects_router)
-
 
     return app
 
