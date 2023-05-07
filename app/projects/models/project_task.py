@@ -15,7 +15,7 @@ class ProjectTask(Base):
     task_number = Column(Integer, nullable=False)
     task_description = Column(String(200))
     task_max_points = Column(Integer, nullable=False)
-    project_id = Column(String(50), ForeignKey("project.id"), nullable=False)
+    project_id = Column(String(50), ForeignKey("projects.id"), nullable=False)
     project = relationship("Project", lazy="subquery")
 
     # TODO generation_id check if relationship is necessary

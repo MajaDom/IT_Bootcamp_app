@@ -14,7 +14,7 @@ from app.lessons.routes import lesson_router, material_router
 from app.user_generation.routes import user_generation_router
 from app.user_projects.routes import user_projects_router
 from app.homeworks.routes import homework_router
-
+from app.attendance.routes import attendance_router
 
 Base.metadata.create_all(bind=engine)
 
@@ -33,6 +33,7 @@ def init_app():
     app.include_router(user_generation_router)
     app.include_router(homework_router)
     app.include_router(user_projects_router)
+    app.include_router(attendance_router)
 
     return app
 
