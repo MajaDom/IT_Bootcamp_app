@@ -12,7 +12,7 @@ class Section(Base):
     section_title = Column(String(100))  # i.e. '2021/2022'
     start_date = Column(Date)
     end_date = Column(Date)
-    __table_args__ = (UniqueConstraint("section_title", "start_date", "end_date", section_title="section_title_start_date_end_date_uc"),
+    __table_args__ = (UniqueConstraint("section_title", "start_date", "end_date"),
                       CheckConstraint(start_date < end_date, section_title='check_start_date_end_date'))
 
     generation_id = Column(String(45), ForeignKey("generation.id"))
