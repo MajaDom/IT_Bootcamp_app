@@ -91,7 +91,7 @@ class ProjectService:
 
         Param project_id: str: The ID of the project to update.
 
-        Returns: Project: The project with the provided title if exists.
+        Returns: Project: The project with the provided ID if exists.
 
         Raises: Exception: If an error occurs while reading the project from the database.
         """
