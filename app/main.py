@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from starlette.responses import RedirectResponse
 
 from app.db.database import engine, Base
-from app.projects.routes import project_router
+from app.projects.routes import project_router, project_task_router
 from app.users.routes import user_router
 from app.course.routes import course_router
 from app.generation.routes import generation_router
@@ -34,6 +34,7 @@ def init_app():
     app.include_router(homework_router)
     app.include_router(user_projects_router)
     app.include_router(attendance_router)
+    app.include_router(project_task_router)
 
     return app
 
