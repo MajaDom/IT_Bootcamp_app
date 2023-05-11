@@ -8,6 +8,7 @@ from app.projects.models import ProjectTask
 
 class ProjectRepository(BaseCRUDRepository):
     """Repository for Project Task Model"""
+
     def create(self, attributes: dict):
         """
         The create function creates a new project task in the database.
@@ -24,17 +25,37 @@ class ProjectRepository(BaseCRUDRepository):
 
     def read_project_task_by_min_points(self, min_points: str):
         """
-        Function takes a part of project title as an argument and returns the project object.
-        If no such project exists, it raises an exception.
+        Function takes a part of project title as an argument and returns the project task object.
+        If no such project task exists, it raises an exception.
 
-        Param part_of_project_title: str: Find projects that have those part of title.
-        Return: A project object if exists.
+        Param part_of_project_title: str: Find project tasks that have more or equal than provided min points.
+        Return: A project task object if exists.
         """
         try:
             project_task = self.db.query(ProjectTask).filter(ProjectTask.task_max_points >= min_points).limit(20).all()
             if not project_task:
                 self.db.rollback()
-                raise ProjectTaskNotFoundException(message=f"Project task with more than {min_points} not found", code=404)
+                raise ProjectTaskNotFoundException(message=f"Project task with more than {min_points} not found",
+                                                   code=404)
+            return project_task
+        except Exception as exc:
+            self.db.rollback()
+            raise exc
+
+    def read_project_task_by_task_number(self, task_number: int):
+        """
+        Function takes task number as an argument and returns the project task object.
+        If no such project task exists, it raises an exception.
+
+        Param task_number: int: Find project task with that task number.
+        Return: A project task object if exists.
+        """
+        try:
+            project_task = self.db.query(ProjectTask).filter(ProjectTask.task_number == task_number).first()
+            if not project_task:
+                self.db.rollback()
+                raise ProjectTaskNotFoundException(
+                    message=f"Project task with provided task number:  {task_number}, not found", code=404)
             return project_task
         except Exception as exc:
             self.db.rollback()

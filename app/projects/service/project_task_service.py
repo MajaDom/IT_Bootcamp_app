@@ -87,7 +87,7 @@ class ProjectTaskService:
     @staticmethod
     def read_project_task_by_min_points(min_points: int):
         """
-        Reads a project task from the database that have more than provided minimum points.
+        Read project tasks from the database that have more than provided minimum points.
 
         Param min_points: int: Minimum points.
 

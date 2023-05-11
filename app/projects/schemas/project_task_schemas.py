@@ -34,7 +34,7 @@ class ProjectTaskSchemaIn(BaseModel):
         orm_mode = True
 
 
-class ProjectSchemaUpdate(BaseModel):
+class ProjectTaskSchemaUpdate(BaseModel):
     """Base Project schema for update"""
     task_number: Optional[int] = None
     task_description: Optional[str] = None
